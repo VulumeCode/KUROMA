@@ -22,6 +22,7 @@ body, html {
   
   height: 98%;
   display: grid;
+
 }
 
 .wrapper {
@@ -90,7 +91,7 @@ h1 {
   /*font-weight: bolder;*/
   font-family: sans-serif;
 }
-h2 {
+h2, .stats {
   position: relative;
   height: 40px;
   margin: 0 auto;
@@ -490,6 +491,13 @@ const playerClick = (move) => {
   <div class="box 99" id="99" onClick="playerClick(99);"></div>
 </div>
 <h2>KUROMA</h2>
+<div class="stats">
+  <span id="score">12/40</span>
+  <span> </span>
+  <span id="games">2</span>
+  <span> </span>
+  <span id="rate">63%</span>
+</div>
 
 </body>
 </html>
