@@ -5,6 +5,7 @@
 
 <meta name="viewport" content="width=device-width, user-scalable=no">
 <meta name="theme-color" content="#2c292d" />
+<link href="https://fonts.googleapis.com/css?family=M+PLUS+1p:900&amp;subset=japanese" rel="stylesheet">
 
 
 <style>
@@ -29,8 +30,8 @@ body, html {
 .wrapper {
     position: relative;
 
-  width:356px;
-  height:356px;
+  /*width:356px;*/
+  /*height:356px;*/
 
   margin: 0 auto;
   display: grid;
@@ -77,13 +78,12 @@ body, html {
 
 h1 {
   position: relative;
-  height: 40px;
+  height: 80%;
 
-  margin: 0 auto;
+  margin: auto;
   color: #ff6188;
   font-size: 500%;
-  /*font-weight: bolder;*/
-  font-family: sans-serif;
+  font-family: 'M PLUS 1p', sans-serif;
 }
 .kuromalogo {
   position: relative;
@@ -97,7 +97,7 @@ h1 {
 
 h2, .stats {
   position: relative;
-  height: 40px;
+  height: 90%;
   margin: auto;
   color: #ff6188;
   font-size: 300%;
@@ -399,8 +399,8 @@ const playerClick = (move) => {
 
 </head>
 <body class="unselectable"  onload="initMaze();">
-<!-- <h1 onClick="initMaze();">黒馬</h1> -->
-<img class="kuromalogo" src="kuroma.png" alt="kuroma" height="92" width="188">
+<h1 onClick="initMaze();">黒馬</h1>
+<!-- <img class="kuromalogo" src="kuroma.png" alt="kuroma" height="92" width="188"> -->
 <div class="wrapper">
   <div class="box 00" id="0" onClick="playerClick(0);"></div>
   <div class="box 01" id="1" onClick="playerClick(1);"></div>
