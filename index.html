@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>KUROMA</title>
+
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<meta name="theme-color" content="#2c292d" />
+
+
+<style>
+@font-face {
+  font-family: "04b_09";
+  src: url(04B_09__.TTF) format("truetype");
+}
+/*@font-face {
+  font-family: "kanji";
+  src: url(keifont.ttf) format("truetype");
+}*/
+
+body, html {
+  background-color: #2c292d;
+  
+  height: 98%;
+  display: grid;
+}
+
+.wrapper {
+    position: relative;
+
+  width:360px;
+  height:360px;
+
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(10, 32px);
+  grid-template-rows: repeat(10, 32px);
+  grid-gap: 4px;
+}
+
+/*.box:hover {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border: 20px solid #f00;
+    background: #00f;
+    margin: 10px;
+    transition: margin .5s;
+    transition: margin .5s;
+}*/
+
+.box {
+  background-color: #908e8f;
+  display: grid;
+
+}
+
+.box ::hover {
+  background-color: #908e8f;
+  display: grid;
+
+}
+
+
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+span {
+    position: relative;
+
+    margin: auto;
+
+  color: #444;
+  font-size: 100%;
+  font-family: monospace;
+}
+
+h1 {
+  position: relative;
+  height: 40px;
+
+  margin: 0 auto;
+  color: #ff6188;
+  font-size: 500%;
+  /*font-weight: bolder;*/
+  font-family: sans-serif;
+}
+h2 {
+  position: relative;
+  height: 40px;
+  margin: 0 auto;
+  color: #ff6188;
+  font-size: 300%;
+  font-weight: bolder;
+  font-family: '04b_09';
+}
+</style>
+
+
+
+<!-- <script src="lodash.js"></script> -->
+<script type="text/javascript">
+Array.prototype.clone = function() {
+  return this.slice(0);
+};
+
+
+window.devtoolsFormatters = [{
+  header: function(obj){
+    if (obj instanceof Array){
+      return ["div",{}, obj.length + ":" + JSON.stringify(obj)]
+    }
+    return null;
+  },
+  hasBody: function(){
+    return false;
+  }
+}]
+
+const startPos = 3;
+const startMaze = [
+  0,0,0,1,0,1,1,0,0,0,
+  0,0,0,1,0,1,1,0,0,0,
+  0,0,1,1,1,1,1,0,0,0,
+  0,0,1,1,0,1,1,0,0,0,
+  0,0,0,1,0,1,1,1,0,0,
+  0,0,1,1,0,1,1,0,1,0,
+  0,0,1,1,1,1,1,1,0,0,
+  0,0,0,1,0,1,1,0,0,0,
+  0,0,0,1,1,1,1,0,0,0,
+  0,0,0,1,0,1,1,0,0,0,
+].map(x=>!!x);
+
+// const startPos = 0;
+// const startMaze = [
+//   0,0,0,0,1,0,0,0,0,0,
+//   0,0,1,0,0,0,0,0,0,0,
+//   0,1,0,0,0,1,0,0,0,0,
+//   0,0,0,1,0,0,0,0,0,0,
+//   0,0,0,0,0,0,0,0,0,0,
+//   0,0,0,0,0,0,0,0,0,0,
+//   0,0,0,0,0,0,0,0,0,0,
+//   0,0,0,0,0,0,0,0,0,0,
+//   0,0,0,0,0,0,0,0,0,0,
+//   0,0,0,0,0,0,0,0,0,0,
+// ].map(x=>!!x);
+
+const dirs = [
+  [+2,+1],
+  [-2,-1],
+  [+2,-1],
+  [-2,+1],
+  [+1,+2],
+  [-1,-2],
+  [+1,-2],
+  [-1,+2],
+];
+
+
+
+const yxsplit = (yx) => {
+  const x = yx % 10;
+  const y = (yx - x)/10; 
+  return [y,x];
+}
+
+const yxmerge = (y,x) => {
+  return (x)+(y*10);
+}
+
+// yx
+const getMoves = (pos, maze) => {
+  const [py,px] = yxsplit(pos);
+  const valids = [];
+  dirs.forEach(([y,x])=>{
+    const dx = x + px;
+    const dy = y + py;
+    const dyx = yxmerge(dy,dx);
+    if (maze[dyx] && dx>=0 && dy>=0 && dx<10 && dy<10){
+      valids.push(dyx);
+    };
+  });
+  return valids;
+}
+
+const makeMove = (move, maze) => {
+  const newMaze = maze.clone()
+  newMaze[move] = false;
+  return newMaze;
+}
+
+const mazeToStr = (maze,startPos,pos,moves) => {
+  let mazeStr = ""
+  for (var y = 0; y < 10; y++) {
+    for (var x = 0; x < 10; x++) {
+      const yx = yxmerge(y,x);
+      if (maze[yx]) {
+        mazeStr += "■ ";
+      } else if (pos == yx) {
+        mazeStr += "@ ";
+      } else if (startPos == yx) {
+        mazeStr += "O ";
+      } else if (moves.includes(yx)) {
+        mazeStr += "x ";
+      } else {
+        mazeStr += "  ";
+      };
+    };
+    mazeStr += "\n";
+  };
+  return mazeStr;
+}
+
+const displayMaze = (maze,startPos,pos,movesDone) => {
+  const movesValid = getMoves(pos,maze);
+  for (var yx = 0; yx < 100; yx++) {
+
+      const square = document.getElementById(yx);
+      if (movesValid.includes(yx)) {
+        square.style["backgroundColor"] = "#ab9df2"; // moves valid
+      } else if (maze[yx]) {
+        square.style["backgroundColor"] = "#fc9867"; // open
+      } else if (pos == yx) {
+        square.style["backgroundColor"] = "#ffd866"; // player
+      } else if (startPos == yx) {
+        square.style["backgroundColor"] = "#ff6188"; // start
+      } else if (movesDone.includes(yx)) {
+        square.style["backgroundColor"] = "#ff6188"; // moves done
+      } else {
+        square.style["backgroundColor"] = "#444"; // nothing
+      };
+  };
+}
+
+
+console.log(mazeToStr(startMaze, startPos,startPos,[]))
+
+
+
+var hist = []
+
+// pos is not in mazeSet. the pos will never be reachable (again).
+const explore = (pos, maze, movesDone) => {
+  const moves = getMoves(pos, maze);
+  if (moves.length > 0 && movesDone.length <= 2) {
+    for (var i = moves.length - 1; i >= 0; i--) {
+      const move = moves[i];
+
+      const newMaze = makeMove(move,maze);
+      explore(move, newMaze, [...movesDone,move]);
+    }
+  } else {
+    if (true) {
+      hist[movesDone.length] += 1;
+      console.log(movesDone.length);
+      console.log(mazeToStr(maze,startPos, pos, movesDone));
+      displayMaze(maze,startPos, pos, movesDone);
+      throw "ok";
+    }
+  }
+}
+
+// CONTROLLERS 
+
+var gamePos;
+var gameTurn;
+var gameMoves;
+var gameMaze;
+var gameStartPos;
+
+const initMazeStatic = () => {
+  gameStartPos = startPos;
+  gamePos = startPos;
+  gameTurn = "player";
+  gameMoves = [];
+  gameMaze = startMaze.clone();
+  gameMaze[startPos] = false;
+  draw();
+}
+
+const initMazeRandomStartPos = () => {
+  gameMaze = startMaze.clone();
+  while (true) {
+    const tryStartPos = Math.trunc(Math.random()*100);
+    if (gameMaze[tryStartPos]) {
+      gameStartPos = tryStartPos;
+      gamePos = tryStartPos;
+      gameTurn = "player";
+      gameMoves = [];
+      gameMaze[tryStartPos] = false;
+      break;
+    }
+  }
+  draw();
+}
+
+const initMaze = initMazeRandomStartPos;
+
+const main = () => {
+  hist = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,]
+  // //[0,0,0,1,1,15,16,125,128,881,1124,5150,7322,26276,40349,114499,177464,413354,614092,1209871,1673876,2812520,3553537,5069489,5711220,6799384,6632516,6474294,5294300,4107834,2690179,1582666,767482,312806,96633,23167,3508,332,0,0,0,0,0,0]
+  explore(startPos, startMaze, [])
+  console.log(hist)
+}
+
+const draw = () => {
+  displayMaze(gameMaze, gameStartPos,gamePos,gameMoves)
+}
+
+const playerClick = (move) => {
+  const movesValid = getMoves(gamePos,gameMaze);
+  if(movesValid.includes(move)){
+    gameMoves.push(move);
+    gameMaze = makeMove(move,gameMaze);
+    gamePos = move;
+    gameTurn = "player";
+  }
+  draw(); 
+  const movesValidNext = getMoves(gamePos,gameMaze);
+  if (movesValidNext.length == 0) {
+    console.log("score: " + gameMoves.length);
+    initMaze();
+  }
+}
+
+
+
+<!-- 
+// document.getElementById(64).animate([
+//   // keyframes
+//   { width: '0%' }, 
+//   { width: '100%' }
+// ], { 
+//   // timing options
+//   duration: 1000,
+//   iterations: 1
+// });
+
+
+
+
+// const mazeToSet = (maze) => {
+//   const mazeSet = [];
+//   maze.forEach((row,y) => {
+//     row.forEach((val,x) => {
+//       if(!!val){
+//         mazeSet.push([x,y])
+//       }
+//     });
+//   });
+//   return mazeSet;
+// }
+
+// const mazeToStr = (maze) => {
+//   let mazeStr = ""
+//   maze.forEach((row) => {
+//     row.forEach((val) => {
+//       mazeStr += val==1 ? "■ " : "  ";
+//     });
+//     mazeStr += "\n";
+//   })
+//   return mazeStr;
+// }
+
+// const makeMove = (move, mazeSet) => {
+//   const [movex,movey] = move;
+//   const newMazeSet = [];
+//   for (var i = mazeSet.length - 1; i >= 0; i--) {
+//     const [mazex,mazey] = mazeSet[i];
+//     if (!(mazex==movex && mazey==movey)) {
+//       newMazeSet.push(mazeSet[i]);
+//     };
+//   };
+//   return newMazeSet; 
+// }
+
+ -->
+
+
+</script>
+
+</head>
+<body class="unselectable"  onload="initMaze();">
+<h1 onClick="initMaze();">黒馬</h1>
+<div class="wrapper">
+  <div class="box 00" id="0" onClick="playerClick(0);"></div>
+  <div class="box 01" id="1" onClick="playerClick(1);"></div>
+  <div class="box 02" id="2" onClick="playerClick(2);"></div>
+  <div class="box 03" id="3" onClick="playerClick(3);"></div>
+  <div class="box 04" id="4" onClick="playerClick(4);"></div>
+  <div class="box 05" id="5" onClick="playerClick(5);"></div>
+  <div class="box 06" id="6" onClick="playerClick(6);"></div>
+  <div class="box 07" id="7" onClick="playerClick(7);"></div>
+  <div class="box 08" id="8" onClick="playerClick(8);"></div>
+  <div class="box 09" id="9" onClick="playerClick(9);"></div>
+  <div class="box 10" id="10" onClick="playerClick(10);"></div>
+  <div class="box 11" id="11" onClick="playerClick(11);"></div>
+  <div class="box 12" id="12" onClick="playerClick(12);"></div>
+  <div class="box 13" id="13" onClick="playerClick(13);"></div>
+  <div class="box 14" id="14" onClick="playerClick(14);"></div>
+  <div class="box 15" id="15" onClick="playerClick(15);"></div>
+  <div class="box 16" id="16" onClick="playerClick(16);"></div>
+  <div class="box 17" id="17" onClick="playerClick(17);"></div>
+  <div class="box 18" id="18" onClick="playerClick(18);"></div>
+  <div class="box 19" id="19" onClick="playerClick(19);"></div>
+  <div class="box 20" id="20" onClick="playerClick(20);"></div>
+  <div class="box 21" id="21" onClick="playerClick(21);"></div>
+  <div class="box 22" id="22" onClick="playerClick(22);"></div>
+  <div class="box 23" id="23" onClick="playerClick(23);"></div>
+  <div class="box 24" id="24" onClick="playerClick(24);"></div>
+  <div class="box 25" id="25" onClick="playerClick(25);"></div>
+  <div class="box 26" id="26" onClick="playerClick(26);"></div>
+  <div class="box 27" id="27" onClick="playerClick(27);"></div>
+  <div class="box 28" id="28" onClick="playerClick(28);"></div>
+  <div class="box 29" id="29" onClick="playerClick(29);"></div>
+  <div class="box 30" id="30" onClick="playerClick(30);"></div>
+  <div class="box 31" id="31" onClick="playerClick(31);"></div>
+  <div class="box 32" id="32" onClick="playerClick(32);"></div>
+  <div class="box 33" id="33" onClick="playerClick(33);"></div>
+  <div class="box 34" id="34" onClick="playerClick(34);"></div>
+  <div class="box 35" id="35" onClick="playerClick(35);"></div>
+  <div class="box 36" id="36" onClick="playerClick(36);"></div>
+  <div class="box 37" id="37" onClick="playerClick(37);"></div>
+  <div class="box 38" id="38" onClick="playerClick(38);"></div>
+  <div class="box 39" id="39" onClick="playerClick(39);"></div>
+  <div class="box 40" id="40" onClick="playerClick(40);"></div>
+  <div class="box 41" id="41" onClick="playerClick(41);"></div>
+  <div class="box 42" id="42" onClick="playerClick(42);"></div>
+  <div class="box 43" id="43" onClick="playerClick(43);"></div>
+  <div class="box 44" id="44" onClick="playerClick(44);"></div>
+  <div class="box 45" id="45" onClick="playerClick(45);"></div>
+  <div class="box 46" id="46" onClick="playerClick(46);"></div>
+  <div class="box 47" id="47" onClick="playerClick(47);"></div>
+  <div class="box 48" id="48" onClick="playerClick(48);"></div>
+  <div class="box 49" id="49" onClick="playerClick(49);"></div>
+  <div class="box 50" id="50" onClick="playerClick(50);"></div>
+  <div class="box 51" id="51" onClick="playerClick(51);"></div>
+  <div class="box 52" id="52" onClick="playerClick(52);"></div>
+  <div class="box 53" id="53" onClick="playerClick(53);"></div>
+  <div class="box 54" id="54" onClick="playerClick(54);"></div>
+  <div class="box 55" id="55" onClick="playerClick(55);"></div>
+  <div class="box 56" id="56" onClick="playerClick(56);"></div>
+  <div class="box 57" id="57" onClick="playerClick(57);"></div>
+  <div class="box 58" id="58" onClick="playerClick(58);"></div>
+  <div class="box 59" id="59" onClick="playerClick(59);"></div>
+  <div class="box 60" id="60" onClick="playerClick(60);"></div>
+  <div class="box 61" id="61" onClick="playerClick(61);"></div>
+  <div class="box 62" id="62" onClick="playerClick(62);"></div>
+  <div class="box 63" id="63" onClick="playerClick(63);"></div>
+  <div class="box 64" id="64" onClick="playerClick(64);"></div>
+  <div class="box 65" id="65" onClick="playerClick(65);"></div>
+  <div class="box 66" id="66" onClick="playerClick(66);"></div>
+  <div class="box 67" id="67" onClick="playerClick(67);"></div>
+  <div class="box 68" id="68" onClick="playerClick(68);"></div>
+  <div class="box 69" id="69" onClick="playerClick(69);"></div>
+  <div class="box 70" id="70" onClick="playerClick(70);"></div>
+  <div class="box 71" id="71" onClick="playerClick(71);"></div>
+  <div class="box 72" id="72" onClick="playerClick(72);"></div>
+  <div class="box 73" id="73" onClick="playerClick(73);"></div>
+  <div class="box 74" id="74" onClick="playerClick(74);"></div>
+  <div class="box 75" id="75" onClick="playerClick(75);"></div>
+  <div class="box 76" id="76" onClick="playerClick(76);"></div>
+  <div class="box 77" id="77" onClick="playerClick(77);"></div>
+  <div class="box 78" id="78" onClick="playerClick(78);"></div>
+  <div class="box 79" id="79" onClick="playerClick(79);"></div>
+  <div class="box 80" id="80" onClick="playerClick(80);"></div>
+  <div class="box 81" id="81" onClick="playerClick(81);"></div>
+  <div class="box 82" id="82" onClick="playerClick(82);"></div>
+  <div class="box 83" id="83" onClick="playerClick(83);"></div>
+  <div class="box 84" id="84" onClick="playerClick(84);"></div>
+  <div class="box 85" id="85" onClick="playerClick(85);"></div>
+  <div class="box 86" id="86" onClick="playerClick(86);"></div>
+  <div class="box 87" id="87" onClick="playerClick(87);"></div>
+  <div class="box 88" id="88" onClick="playerClick(88);"></div>
+  <div class="box 89" id="89" onClick="playerClick(89);"></div>
+  <div class="box 90" id="90" onClick="playerClick(90);"></div>
+  <div class="box 91" id="91" onClick="playerClick(91);"></div>
+  <div class="box 92" id="92" onClick="playerClick(92);"></div>
+  <div class="box 93" id="93" onClick="playerClick(93);"></div>
+  <div class="box 94" id="94" onClick="playerClick(94);"></div>
+  <div class="box 95" id="95" onClick="playerClick(95);"></div>
+  <div class="box 96" id="96" onClick="playerClick(96);"></div>
+  <div class="box 97" id="97" onClick="playerClick(97);"></div>
+  <div class="box 98" id="98" onClick="playerClick(98);"></div>
+  <div class="box 99" id="99" onClick="playerClick(99);"></div>
+</div>
+<h2>KUROMA</h2>
+
+</body>
+</html>
