@@ -52,7 +52,7 @@ body, html {
 }*/
 
 .box {
-  background-color: #444;
+  background-color: #2c292d;
   display: grid;
   touch-action: manipulation;
 }
@@ -71,7 +71,7 @@ body, html {
 
     margin: auto;
 
-  color: #444;
+  color: #454046;
   font-size: 100%;
   font-family: monospace;
 }*/
@@ -271,9 +271,9 @@ const displayMaze = (maze,startPos,pos,movesDone) => {
 
       const square = document.getElementById(yx);
       if (movesValid.includes(yx)) {
-        square.style["backgroundColor"] = "#78dce8"; // moves valid
+        square.style["backgroundColor"] = "#fc9867"; // moves valid
       } else if (maze[yx]) {
-        square.style["backgroundColor"] = "#fc9867"; // open
+        square.style["backgroundColor"] = "#454046"; // open
       } else if (pos == yx) {
         square.style["backgroundColor"] = "#ffd866"; // player
       } else if (startPos == yx) {
