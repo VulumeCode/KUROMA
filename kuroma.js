@@ -56,6 +56,20 @@ var startMaze = [
 //   0,0,0,0,0,0,0,0,0,0,
 // ].map(x=>!!x);
 
+var testStartPos = 0;
+var testMaze = [
+  0,0,0,0,0,0,0,0,0,0,
+  0,0,1,0,0,0,0,0,0,0,
+  0,1,0,0,0,0,0,0,0,0,
+  0,0,0,1,0,0,0,0,0,0,
+  0,0,0,0,0,0,0,0,0,0,
+  0,0,0,0,0,0,0,0,0,0,
+  0,0,0,0,0,0,0,0,0,0,
+  0,0,0,0,0,0,0,0,0,0,
+  0,0,0,0,0,0,0,0,0,0,
+  0,0,0,0,0,0,0,0,0,0,
+].map(x=>!!x);
+
 const dirs = [
   [+2,+1],
   [-2,-1],
@@ -82,8 +96,13 @@ const genMaze = () => {
     }
   }
   // randomly flip 2 cols
-  const [swapColA, swapColB] = [Math.randomInt(10),Math.randomInt(10)];
+  [swapColA, swapColB] = [Math.randomInt(10),Math.randomInt(10)];
   mazeCols.swap(swapColA, swapColB);
+  // console.log(swapColA, swapColB);
+  [swapColA, swapColB] = [Math.randomInt(10),Math.randomInt(10)];
+  mazeCols.swap(swapColA, swapColB);
+  // console.log(swapColA, swapColB);
+
   mazeCoords = mazeCols.flat();
 
   // biased shuffle sampled from the middle.
@@ -105,10 +124,67 @@ const genMaze = () => {
   }
 
   if (countSquares(maze) != 40) {
-    console.warn("gen maze wrong nr sq:"+countSquares(maze)+"\n" + mazeToStr(maze,null,null,[]));
+    throw ("gen maze wrong nr sq:"+countSquares(maze)+"\n" + mazeToStr(maze,null,null,[]));
+  }
+
+  if (! allSquaresReachableN(maze,10)) {
+    console.debug("gen maze not all reachable:\n"+ encMaze(maze));
+    maze = genMaze(); // try again
   }
   return maze;
 }
+
+
+const encMaze = (maze) => {
+  const sliceA = maze.slice(0,50).reduce((a,t)=>a+String(t|0),"");
+  const sliceB = maze.slice(50,100).reduce((a,t)=>a+String(t|0),"");
+  const intA = (parseInt(sliceA,2));
+  const intB = (parseInt(sliceB,2));
+  const code = btoa(intA)+":"+btoa(intB);
+  return code;
+}
+
+const decMaze = (code) => {
+  const [codeA,codeB] = code.split(":");
+  const intA = atob(codeA);
+  const intB = atob(codeB);
+  const sliceA = (intA*1).toString(2);
+  const sliceB = (intB*1).toString(2);
+  const slicePadA = "0".repeat(50-sliceA.length) + sliceA;
+  const slicePadB = "0".repeat(50-sliceB.length) + sliceB;
+  const maze = [...slicePadA,...slicePadB].map(x=>!!(x|0));
+  return maze;
+}
+
+const allSquaresReachableN = (maze, n) => {
+  for (var yx = 0; yx < 100; yx++) {
+    if (maze[yx]) {
+      if (! reachableN(maze,yx,n)) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+const reachableN = (maze, yx, n) => {
+  if (n==0) {
+    return true;
+  }
+  const reachable = getMoves(yx,maze);
+  if (reachable.length == 0) {
+    return false;
+  }
+  for (var i = reachable.length - 1; i >= 0; i--) {
+    const move = reachable[i];
+    const newMaze = makeMove(move, maze);
+    if (reachableN(newMaze, move, n-1)) {
+        return true;
+    }
+  }
+  return false ;
+}
+
 
 const countSquares = (maze) => {
   return maze.reduce((x,y)=>x+y,0);
