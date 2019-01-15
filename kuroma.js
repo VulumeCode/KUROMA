@@ -285,7 +285,7 @@ const displayStats = () => {
   gradeElem.textContent = "Grade\xa0=\xa0" + Math.floor(100*((game.stats.reduce((a,b) => a+b, 0) / (40*game.stats.length))||0));
 
   const maxElem = document.getElementById("max");
-  maxElem.textContent = "Max\xa0=\xa0" + Math.max(game.stats);
+  maxElem.textContent = "Max\xa0=\xa0" + Math.max(...game.stats);
 }
 
 
