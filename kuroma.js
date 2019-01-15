@@ -1,33 +1,4 @@
 
-Array.prototype.clone = function() {
-  return this.slice(0);
-};
-
-
-window.devtoolsFormatters = [{
-  header: function(obj){
-    if (obj instanceof Array){
-      return ["div",{}, obj.length + ":" + JSON.stringify(obj)]
-    }
-    return null;
-  },
-  hasBody: function(){
-    return false;
-  }
-}]
-
-Math.randomInt = (i) => {
-  return Math.floor(Math.random() * i);
-}
-
-Math.randomIntBetween = (a,b) => {
-  return a + Math.randomInt(b-a);
-}
-
-Array.prototype.swap = function (a,b) {
-  [this[a],this[b]] = [this[b],this[a]];
-}
-
 var startPos = 3;
 var startMaze = [
   0,0,0,1,0,1,1,0,0,0,
@@ -323,6 +294,7 @@ const game = {
   turn : null,
   moves : null,
   maze : null,
+  startMaze : null,
   startPos : null,
   stats : null,
 }
@@ -334,6 +306,7 @@ const initMazeStatic = () => {
   game.moves = [];
   game.maze = startMaze.clone();
   game.maze[startPos] = false;
+  game.startMaze = game.maze;
   draw();
 }
 
@@ -347,6 +320,7 @@ const initMazeRandomStartPos = () => {
       game.turn = "player";
       game.moves = [];
       game.maze[tryStartPos] = false;
+      game.startMaze = game.maze;
       break;
     }
   }
@@ -363,6 +337,7 @@ const initMazeRandom = () => {
       game.turn = "player";
       game.moves = [];
       game.maze[tryStartPos] = false;
+      game.startMaze = game.maze.clone();
       break;
     }
   }
@@ -446,8 +421,40 @@ const playerClick = (move) => {
       localStorage.setItem("stats", JSON.stringify(game.stats))
       console.log("Stats: " + (game.stats));
       initMaze();
-
     }
   }
+}
+
+const clickRestart = () => {
+  game.startPos = game.startPos;
+  game.pos = game.startPos;
+  game.turn = "player";
+  game.moves = [];
+  game.maze = game.startMaze;
+  game.startMaze = game.maze;
+  draw();
+}
+
+const clickReset = () => {
+  localStorage.setItem("stats", JSON.stringify([]))
+  initMaze();
 
 }
+
+
+// // infinite scroll TODO throttle
+// $(document).ready(function() {
+//     var bgHeight = $(document).height(); // pixel height of background image
+//     $('body').height( bgHeight + $(window).height() );
+//     $(window).scroll(function() {
+//         if ( $(window).scrollTop() >= ($('body').height() - $(window).height()) ) {
+//             $(window).scrollTop(10);
+//         }
+//         else if ( $(window).scrollTop() == 0 ) {
+//             $(window).scrollTop($('body').height() - $(window).height() -10);
+//         }
+//     });
+// });
+// $(window).resize(function() {
+//     $('body').height( bgHeight + $(window).height() );
+// });

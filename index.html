@@ -11,15 +11,16 @@
 <link rel="icon" type="image/png" href="favicontr.png" sizes="32x32">
 
 
-
-
+<script src="anime.js"></script>
 <script src="lodash.js"></script>
+<script src="jquery-3.3.1.js"></script>
+
+<script src="helpers.js"></script>
 <script src="kuroma.js"></script>
 
 </head>
 <body class="unselectable"  onload="initMaze();">
 <h1 onClick="initMaze();">黒馬</h1>
-<!-- <img class="kuromalogo" src="kuroma.png" alt="kuroma" height="92" width="188"> -->
 <div class="wrapper">
   <div class="box 00" id="0" onClick="playerClick(0);"></div>
   <div class="box 01" id="1" onClick="playerClick(1);"></div>
@@ -130,11 +131,11 @@
   <div id="rank"></div>
 </div>
 <h1>黒馬</h1>
-<h2>KUROMA</h2>
+<h2 onClick="clickRestart();">RESTART</h2>
 <h1>黒馬</h1>
-<h2>KUROMA</h2>
+<h2 onClick="initMaze();">NEW GAME</h2>
 <h1>黒馬</h1>
-<h2>KUROMA</h2>
+<h2 onClick="clickReset();">RESET SCORE</h2>
 
 </body>
 </html>
