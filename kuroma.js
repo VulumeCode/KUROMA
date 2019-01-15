@@ -256,8 +256,7 @@ const mazeToStr = (maze,startPos,pos,moves) => {
 const displayMaze = (maze,startPos,pos,movesDone) => {
   const movesValid = getMoves(pos,maze);
   for (var yx = 0; yx < 100; yx++) {
-
-      const square = document.getElementById(yx);
+      const square = document.getElementById(yx)
       if (movesValid.includes(yx)) {
         square.style["backgroundColor"] = "#fc9867"; // moves valid
       } else if (maze[yx]) {
@@ -271,6 +270,7 @@ const displayMaze = (maze,startPos,pos,movesDone) => {
       } else {
         square.style["backgroundColor"] = "#2c292d"; // nothing
       };
+
   };
 }
 
@@ -377,6 +377,18 @@ const initMaze = () => {
     game.stats = []
   }
   initMazeRandom();
+  for (var yx = 0; yx < 100; yx++) {
+    const square = document.getElementById(yx);
+    square.animate([
+      // keyframes
+      { margin: '16px' },
+      { margin: '0px' }
+    ], {
+      // timing options
+      duration: 200,
+      iterations: 1
+    });
+  }
 }
 
 const main = () => {
@@ -397,10 +409,21 @@ const playerClick = (move) => {
   if(movesValid.includes(move)){
     game.moves.push(move);
     game.maze = makeMove(move,game.maze);
+
     game.pos = move;
     game.turn = "player";
   }
   draw();
+  const square = document.getElementById(move);
+  square.animate([
+    // keyframes
+    { margin: '4px' },
+    { margin: '0px' }
+  ], {
+    // timing options
+    duration: 200,
+    iterations: 1
+  });
   const movesValidNext = getMoves(game.pos,game.maze);
 
   // GAME OVER
@@ -409,6 +432,7 @@ const playerClick = (move) => {
     game.stats.push(game.moves.length+1);
     localStorage.setItem("stats", JSON.stringify(game.stats))
     initMaze();
+
   }
 }
 

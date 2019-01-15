@@ -3,10 +3,6 @@
   font-family: "04b_09";
   src: url(04B_09__.TTF) format("truetype");
 }
-/*@font-face {
-  font-family: "kanji";
-  src: url(keifont.ttf) format("truetype");
-}*/
 
 body, html {
   background-color: #2c292d;
