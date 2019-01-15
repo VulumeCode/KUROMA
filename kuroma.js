@@ -276,16 +276,16 @@ const displayMaze = (maze,startPos,pos,movesDone) => {
 
 const displayStats = () => {
   const scoreElem = document.getElementById("score");
-  scoreElem.textContent = "Score\xa0=\xa0" + (game.moves.length+1);
-
-  const gamesElem = document.getElementById("games");
-  gamesElem.textContent = "Games\xa0=\xa0" + game.stats.length;
-
-  const gradeElem = document.getElementById("grade");
-  gradeElem.textContent = "Grade\xa0=\xa0" + Math.floor(100*((game.stats.reduce((a,b) => a+b, 0) / (40*game.stats.length))||0));
+  scoreElem.textContent = "Score\xa0\xa0\xa0" + (game.moves.length+1) + "p";
 
   const maxElem = document.getElementById("max");
-  maxElem.textContent = "Max\xa0=\xa0" + Math.max(...game.stats);
+  maxElem.textContent = "Max\xa0\xa0\xa0" + Math.max(...game.stats) + "p";
+
+  const gamesElem = document.getElementById("games");
+  gamesElem.textContent = "Games\xa0\xa0\xa0" + game.stats.length;
+
+  const rankElem = document.getElementById("rank");
+  rankElem.textContent = "Rank\xa0\xa0\xa0#" + Math.floor(100-(100*((game.stats.reduce((a,b) => a+b, 0) / (40*game.stats.length))||0)));
 }
 
 
