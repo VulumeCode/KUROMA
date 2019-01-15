@@ -274,6 +274,20 @@ const displayMaze = (maze,startPos,pos,movesDone) => {
   };
 }
 
+const displayStats = () => {
+  const scoreElem = document.getElementById("score");
+  scoreElem.textContent = "Score \t = \t " + (game.moves.length+1);
+
+  const gamesElem = document.getElementById("games");
+  gamesElem.textContent = "Games \t = \t " + game.stats.length;
+
+  const gradeElem = document.getElementById("grade");
+  gradeElem.textContent = "Grade \t = \t " + Math.floor(100*((game.stats.reduce((a,b) => a+b, 0) / (40*game.stats.length))||0));
+
+  const maxElem = document.getElementById("max");
+  maxElem.textContent = "Max \t = \t " + Math.max(game.stats);
+}
+
 
 console.log(mazeToStr(startMaze, startPos,startPos,[]))
 
@@ -304,32 +318,35 @@ const explore = (pos, maze, movesDone) => {
 
 // CONTROLLERS
 
-var gamePos;
-var gameTurn;
-var gameMoves;
-var gameMaze;
-var gameStartPos;
+const game = {
+  pos : null,
+  turn : null,
+  moves : null,
+  maze : null,
+  startPos : null,
+  stats : null,
+}
 
 const initMazeStatic = () => {
-  gameStartPos = startPos;
-  gamePos = startPos;
-  gameTurn = "player";
-  gameMoves = [];
-  gameMaze = startMaze.clone();
-  gameMaze[startPos] = false;
+  game.startPos = startPos;
+  game.pos = startPos;
+  game.turn = "player";
+  game.moves = [];
+  game.maze = startMaze.clone();
+  game.maze[startPos] = false;
   draw();
 }
 
 const initMazeRandomStartPos = () => {
-  gameMaze = startMaze.clone();
+  game.maze = startMaze.clone();
   while (true) {
     const tryStartPos = Math.randomInt(100);
-    if (gameMaze[tryStartPos]) {
-      gameStartPos = tryStartPos;
-      gamePos = tryStartPos;
-      gameTurn = "player";
-      gameMoves = [];
-      gameMaze[tryStartPos] = false;
+    if (game.maze[tryStartPos]) {
+      game.startPos = tryStartPos;
+      game.pos = tryStartPos;
+      game.turn = "player";
+      game.moves = [];
+      game.maze[tryStartPos] = false;
       break;
     }
   }
@@ -337,22 +354,30 @@ const initMazeRandomStartPos = () => {
 }
 
 const initMazeRandom = () => {
-  gameMaze = genMaze();
+  game.maze = genMaze();
   while (true) {
     const tryStartPos = Math.randomInt(100);
-    if (gameMaze[tryStartPos]) {
-      gameStartPos = tryStartPos;
-      gamePos = tryStartPos;
-      gameTurn = "player";
-      gameMoves = [];
-      gameMaze[tryStartPos] = false;
+    if (game.maze[tryStartPos]) {
+      game.startPos = tryStartPos;
+      game.pos = tryStartPos;
+      game.turn = "player";
+      game.moves = [];
+      game.maze[tryStartPos] = false;
       break;
     }
   }
   draw();
 }
 
-const initMaze = initMazeRandom;
+const initMaze = () => {
+  const loadStats = localStorage.getItem('stats');
+  if (loadStats){
+    game.stats = JSON.parse(loadStats)
+  } else {
+    game.stats = []
+  }
+  initMazeRandom();
+}
 
 const main = () => {
   hist = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,]
@@ -362,21 +387,27 @@ const main = () => {
 }
 
 const draw = () => {
-  displayMaze(gameMaze, gameStartPos,gamePos,gameMoves)
+  displayMaze(game.maze, game.startPos,game.pos,game.moves)
+
+  displayStats(game.stats)
 }
 
 const playerClick = (move) => {
-  const movesValid = getMoves(gamePos,gameMaze);
+  const movesValid = getMoves(game.pos,game.maze);
   if(movesValid.includes(move)){
-    gameMoves.push(move);
-    gameMaze = makeMove(move,gameMaze);
-    gamePos = move;
-    gameTurn = "player";
+    game.moves.push(move);
+    game.maze = makeMove(move,game.maze);
+    game.pos = move;
+    game.turn = "player";
   }
   draw();
-  const movesValidNext = getMoves(gamePos,gameMaze);
+  const movesValidNext = getMoves(game.pos,game.maze);
+
+  // GAME OVER
   if (movesValidNext.length == 0) {
-    console.log("score: " + gameMoves.length);
+    console.log("score: " + (game.moves.length+1));
+    game.stats.push(game.moves.length+1);
+    localStorage.setItem("stats", JSON.stringify(game.stats))
     initMaze();
   }
 }
