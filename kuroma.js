@@ -51,10 +51,10 @@ const dirs = [
   [+1,-2],
   [-1,+2],
 ];
-
+var mazeCoords = []
 const genMaze = () => {
   let maze = [];
-  let mazeCoords = [];
+  mazeCoords = [];
 
   let mazeCols = []
   for (var y = 0; y < 10; y++) {
@@ -98,7 +98,7 @@ const genMaze = () => {
     throw ("gen maze wrong nr sq:"+countSquares(maze)+"\n" + mazeToStr(maze,null,null,[]));
   }
 
-  if (! allSquaresReachableN(maze,10)) {
+  if (! allSquaresReachableN(maze,25)) {
     console.debug("gen maze not all reachable:\n"+ encMaze(maze));
     maze = genMaze(); // try again
   }
@@ -224,27 +224,6 @@ const mazeToStr = (maze,startPos,pos,moves) => {
   return mazeStr;
 }
 
-const displayMaze = (maze,startPos,pos,movesDone) => {
-  const movesValid = getMoves(pos,maze);
-  for (var yx = 0; yx < 100; yx++) {
-      const square = document.getElementById(yx)
-      if (movesValid.includes(yx)) {
-        square.style["backgroundColor"] = "#fc9867"; // moves valid
-      } else if (maze[yx]) {
-        square.style["backgroundColor"] = "#454046"; // open
-      } else if (pos == yx) {
-        square.style["backgroundColor"] = "#ffd866"; // player
-      } else if (startPos == yx) {
-        square.style["backgroundColor"] = "#ff6188"; // start
-      } else if (movesDone.includes(yx)) {
-        square.style["backgroundColor"] = "#ff6188"; // moves done
-      } else {
-        square.style["backgroundColor"] = "#2c292d"; // nothing
-      };
-
-  };
-}
-
 const displayStats = () => {
   const scoreElem = document.getElementById("score");
   scoreElem.textContent = "Score\xa0\xa0\xa0" + (game.moves.length+1) + "p";
@@ -256,7 +235,8 @@ const displayStats = () => {
   gamesElem.textContent = "Games\xa0\xa0\xa0" + game.stats.length;
 
   const rankElem = document.getElementById("rank");
-  rankElem.textContent = "Rank\xa0\xa0\xa0#" + Math.floor(100-(100*((game.stats.reduce((a,b) => a+b, 0) / (40*game.stats.length))||0)));
+  const recentStats = game.stats.slice(-3);
+  rankElem.textContent = "Rank\xa0\xa0\xa0#" + Math.floor(100-(100*((recentStats.reduce((a,b) => a+b, 0) / (40*recentStats.length))||0)));
 }
 
 
@@ -281,7 +261,7 @@ const explore = (pos, maze, movesDone) => {
       hist[movesDone.length] += 1;
       console.log(movesDone.length);
       console.log(mazeToStr(maze,startPos, pos, movesDone));
-      displayMaze(maze,startPos, pos, movesDone);
+      view.drawMaze(maze,startPos, pos, movesDone);
       throw "ok";
     }
   }
@@ -352,18 +332,8 @@ const initMaze = () => {
     game.stats = []
   }
   initMazeRandom();
-  for (var yx = 0; yx < 100; yx++) {
-    const square = document.getElementById(yx);
-    square.animate([
-      // keyframes
-      { margin: '16px' },
-      { margin: '0px' }
-    ], {
-      // timing options
-      duration: 200,
-      iterations: 1
-    });
-  }
+
+  view.mazeAppear();
 }
 
 const main = () => {
@@ -374,22 +344,13 @@ const main = () => {
 }
 
 const draw = () => {
-  displayMaze(game.maze, game.startPos,game.pos,game.moves)
+  view.drawMaze(game.maze, game.startPos,game.pos,game.moves)
 
   displayStats(game.stats)
 }
 
 const playerClick = (move) => {
-  const square = document.getElementById(move);
-  square.animate([
-    // keyframes
-    { margin: '3px' },
-    { margin: '0px' }
-  ], {
-    // timing options
-    duration: 200,
-    iterations: 1,
-  });
+  view.boxClick(move);
 
   const movesValid = getMoves(game.pos,game.maze);
   if(movesValid.includes(move)){
@@ -404,22 +365,13 @@ const playerClick = (move) => {
     const movesValidNext = getMoves(game.pos,game.maze);
     for (var i = movesValidNext.length - 1; i >= 0; i--) {
       const moveValidNext = movesValidNext[i];
-      const square = document.getElementById(moveValidNext);
-      square.animate([
-        // keyframes
-        { margin: '3px' },
-        { margin: '0px' }
-      ], {
-        // timing options
-        duration: 200,
-        iterations: 1,
-      });
+      view.boxClick(moveValidNext);
     }
     // GAME OVER
     if (movesValidNext.length == 0) {
       game.stats.push(game.moves.length+1);
       localStorage.setItem("stats", JSON.stringify(game.stats))
-      console.log("Stats: " + (game.stats));
+      console.log("Score: " + (game.stats.slice(-1)));
       initMaze();
     }
   }
