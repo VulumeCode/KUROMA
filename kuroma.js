@@ -279,7 +279,7 @@ const displayStats = () => {
   scoreElem.textContent = "Score\xa0\xa0\xa0" + (game.moves.length+1) + "p";
 
   const maxElem = document.getElementById("max");
-  maxElem.textContent = "Max\xa0\xa0\xa0" + Math.max(...game.stats) + "p";
+  maxElem.textContent = "Max\xa0\xa0\xa0" + Math.max(0, ...game.stats) + "p";
 
   const gamesElem = document.getElementById("games");
   gamesElem.textContent = "Games\xa0\xa0\xa0" + game.stats.length;
