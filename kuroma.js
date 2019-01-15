@@ -405,6 +405,17 @@ const draw = () => {
 }
 
 const playerClick = (move) => {
+  const square = document.getElementById(move);
+  square.animate([
+    // keyframes
+    { margin: '3px' },
+    { margin: '0px' }
+  ], {
+    // timing options
+    duration: 200,
+    iterations: 1,
+  });
+
   const movesValid = getMoves(game.pos,game.maze);
   if(movesValid.includes(move)){
     game.moves.push(move);
@@ -412,76 +423,31 @@ const playerClick = (move) => {
 
     game.pos = move;
     game.turn = "player";
-  }
-  draw();
-  const square = document.getElementById(move);
-  square.animate([
-    // keyframes
-    { margin: '4px' },
-    { margin: '0px' }
-  ], {
-    // timing options
-    duration: 200,
-    iterations: 1
-  });
-  const movesValidNext = getMoves(game.pos,game.maze);
 
-  // GAME OVER
-  if (movesValidNext.length == 0) {
-    console.log("score: " + (game.moves.length+1));
-    game.stats.push(game.moves.length+1);
-    localStorage.setItem("stats", JSON.stringify(game.stats))
-    initMaze();
+    draw();
 
+    const movesValidNext = getMoves(game.pos,game.maze);
+    for (var i = movesValidNext.length - 1; i >= 0; i--) {
+      const moveValidNext = movesValidNext[i];
+      const square = document.getElementById(moveValidNext);
+      square.animate([
+        // keyframes
+        { margin: '3px' },
+        { margin: '0px' }
+      ], {
+        // timing options
+        duration: 200,
+        iterations: 1,
+      });
+    }
+    // GAME OVER
+    if (movesValidNext.length == 0) {
+      game.stats.push(game.moves.length+1);
+      localStorage.setItem("stats", JSON.stringify(game.stats))
+      console.log("Stats: " + (game.stats));
+      initMaze();
+
+    }
   }
+
 }
-
-
-
-// document.getElementById(64).animate([
-//   // keyframes
-//   { width: '0%' },
-//   { width: '100%' }
-// ], {
-//   // timing options
-//   duration: 1000,
-//   iterations: 1
-// });
-
-
-
-
-// const mazeToSet = (maze) => {
-//   const mazeSet = [];
-//   maze.forEach((row,y) => {
-//     row.forEach((val,x) => {
-//       if(!!val){
-//         mazeSet.push([x,y])
-//       }
-//     });
-//   });
-//   return mazeSet;
-// }
-
-// const mazeToStr = (maze) => {
-//   let mazeStr = ""
-//   maze.forEach((row) => {
-//     row.forEach((val) => {
-//       mazeStr += val==1 ? "■ " : "  ";
-//     });
-//     mazeStr += "\n";
-//   })
-//   return mazeStr;
-// }
-
-// const makeMove = (move, mazeSet) => {
-//   const [movex,movey] = move;
-//   const newMazeSet = [];
-//   for (var i = mazeSet.length - 1; i >= 0; i--) {
-//     const [mazex,mazey] = mazeSet[i];
-//     if (!(mazex==movex && mazey==movey)) {
-//       newMazeSet.push(mazeSet[i]);
-//     };
-//   };
-//   return newMazeSet;
-// }
