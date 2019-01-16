@@ -66,14 +66,17 @@ const genMaze = () => {
       mazeCol.push(yx);
     }
   }
-  // randomly flip 2 cols
-  [swapColA, swapColB] = [Math.randomInt(10),Math.randomInt(10)];
-  mazeCols.swap(swapColA, swapColB);
-  // console.log(swapColA, swapColB);
-  [swapColA, swapColB] = [Math.randomInt(10),Math.randomInt(10)];
-  mazeCols.swap(swapColA, swapColB);
-  // console.log(swapColA, swapColB);
+  // TODO compare
+  // // randomly flip 2 cols
+  // [swapColA, swapColB] = [Math.randomInt(10),Math.randomInt(10)];
+  // mazeCols.swap(swapColA, swapColB);
+  // // console.log(swapColA, swapColB);
+  // [swapColA, swapColB] = [Math.randomInt(10),Math.randomInt(10)];
+  // mazeCols.swap(swapColA, swapColB);
+  // // console.log(swapColA, swapColB);
 
+  // shuffle cols
+  mazeCols.sort((x,y)=>Math.random() < 0.3 ? 0 : Math.random() < 0.5 ? 1 : -1);
   mazeCoords = mazeCols.flat();
 
   // biased shuffle sampled from the middle.
@@ -102,6 +105,8 @@ const genMaze = () => {
     console.debug("gen maze not all reachable:\n"+ encMaze(maze));
     maze = genMaze(); // try again
   }
+
+  // TODO center to avg(x)
   return maze;
 }
 
