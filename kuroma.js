@@ -317,6 +317,8 @@ const initMazeRandom = () => {
 }
 
 const initMaze = () => {
+  $(window).scrollTop(0);
+
   const loadStats = localStorage.getItem('stats');
   if (loadStats){
     game.stats = JSON.parse(loadStats)
@@ -362,6 +364,8 @@ const playerClick = (move) => {
 }
 
 const clickRestart = () => {
+  $(window).scrollTop(0);
+
   game.startPos = game.startPos;
   game.pos = game.startPos;
   game.turn = "player";
@@ -372,6 +376,8 @@ const clickRestart = () => {
 }
 
 const clickReset = () => {
+  $(window).scrollTop(0);
+
   localStorage.setItem("stats", JSON.stringify([]))
   initMaze();
 }
