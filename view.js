@@ -65,6 +65,8 @@ view.mazeDisappear = () => {
 
 
 view.drawMaze = (maze, startPos, pos, movesDone) => {
+  movesDone = movesDone || [];
+
   const movesValid = getMoves(pos, maze);
   const getColor = (yx) => {
     if (movesValid.includes(yx)) {
