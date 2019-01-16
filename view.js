@@ -8,6 +8,7 @@ const colors = {
   start: "#ff6188",
   moveDone: "#ff6188",
   nothing: "#2c292d",
+  background: "#2c292d",
 }
 
 
@@ -37,6 +38,7 @@ view.mazeAppear = () => {
   return anime({
     targets: boxes,
     scale: [0, 1],
+    opacity: 1,
     duration: 100,
     easing: 'linear',
     delay: function(el, yx) {
@@ -51,7 +53,7 @@ view.mazeDisappear = () => {
   return anime({
     targets: boxes,
     scale: [1,0],
-    color: colors.nothing,
+    opacity: 0,
     duration: 100,
     easing: 'linear',
     delay: function(el, yx) {
