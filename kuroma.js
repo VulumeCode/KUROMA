@@ -224,20 +224,6 @@ const mazeToStr = (maze,startPos,pos,moves) => {
   return mazeStr;
 }
 
-const displayStats = () => {
-  const scoreElem = document.getElementById("score");
-  scoreElem.textContent = "Score\xa0\xa0\xa0" + (game.moves.length+1) + "p";
-
-  const maxElem = document.getElementById("max");
-  maxElem.textContent = "Max\xa0\xa0\xa0" + Math.max(0, ...game.stats) + "p";
-
-  const gamesElem = document.getElementById("games");
-  gamesElem.textContent = "Games\xa0\xa0\xa0" + game.stats.length;
-
-  const rankElem = document.getElementById("rank");
-  const recentStats = game.stats.slice(-3);
-  rankElem.textContent = "Rank\xa0\xa0\xa0#" + Math.floor(100-(100*((recentStats.reduce((a,b) => a+b, 0) / (40*recentStats.length))||0)));
-}
 
 
 console.log(mazeToStr(startMaze, startPos,startPos,[]))
@@ -267,6 +253,13 @@ const explore = (pos, maze, movesDone) => {
   }
 }
 
+const main = () => {
+  hist = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,]
+  // //[0,0,0,1,1,15,16,125,128,881,1124,5150,7322,26276,40349,114499,177464,413354,614092,1209871,1673876,2812520,3553537,5069489,5711220,6799384,6632516,6474294,5294300,4107834,2690179,1582666,767482,312806,96633,23167,3508,332,0,0,0,0,0,0]
+  explore(startPos, startMaze, [])
+  console.log(hist)
+}
+
 // CONTROLLERS
 
 const game = {
@@ -287,7 +280,6 @@ const initMazeStatic = () => {
   game.maze = startMaze.clone();
   game.maze[startPos] = false;
   game.startMaze = game.maze;
-  draw();
 }
 
 const initMazeRandomStartPos = () => {
@@ -304,7 +296,6 @@ const initMazeRandomStartPos = () => {
       break;
     }
   }
-  draw();
 }
 
 const initMazeRandom = () => {
@@ -321,7 +312,6 @@ const initMazeRandom = () => {
       break;
     }
   }
-  draw();
 }
 
 const initMaze = () => {
@@ -331,23 +321,15 @@ const initMaze = () => {
   } else {
     game.stats = []
   }
-  initMazeRandom();
 
-  view.mazeAppear();
+  view.mazeDisappear().finished.then(()=>{
+    initMazeRandom();
+    view.drawGame(game).finished.then(()=>{
+      view.mazeAppear();
+    });
+  });
 }
 
-const main = () => {
-  hist = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,]
-  // //[0,0,0,1,1,15,16,125,128,881,1124,5150,7322,26276,40349,114499,177464,413354,614092,1209871,1673876,2812520,3553537,5069489,5711220,6799384,6632516,6474294,5294300,4107834,2690179,1582666,767482,312806,96633,23167,3508,332,0,0,0,0,0,0]
-  explore(startPos, startMaze, [])
-  console.log(hist)
-}
-
-const draw = () => {
-  view.drawMaze(game.maze, game.startPos,game.pos,game.moves)
-
-  displayStats(game.stats)
-}
 
 const playerClick = (move) => {
   view.boxClick(move);
@@ -360,8 +342,6 @@ const playerClick = (move) => {
     game.pos = move;
     game.turn = "player";
 
-    draw();
-
     const movesValidNext = getMoves(game.pos,game.maze);
     for (var i = movesValidNext.length - 1; i >= 0; i--) {
       const moveValidNext = movesValidNext[i];
@@ -373,6 +353,8 @@ const playerClick = (move) => {
       localStorage.setItem("stats", JSON.stringify(game.stats))
       console.log("Score: " + (game.stats.slice(-1)));
       initMaze();
+    } else {
+      view.drawGame(game);
     }
   }
 }
@@ -384,7 +366,7 @@ const clickRestart = () => {
   game.moves = [];
   game.maze = game.startMaze;
   game.startMaze = game.maze;
-  draw();
+  view.drawGame(game);
 }
 
 const clickReset = () => {
