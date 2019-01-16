@@ -15,6 +15,7 @@ const colors = {
   validMove: "#676E95",
   open: "#32374D",
   playerPos: "#89DDFF",
+  playerPosDeath: "#FF5370",
   startPos: "#FF5370",
   moveDone: "#FF5370",
   nothing: "#292D3E",
@@ -71,17 +72,23 @@ view.mazeAppear = () => {
     },
   });
 }
-view.mazeDisappear = () => {
+view.mazeDisappear = (movesDone) => {
   return anime({
     targets: ".box",
     scale: [1,0],
     opacity: 0,
-    duration: 100,
+    duration: 1000,
     easing: 'easeOutQuad',
     delay: function(el, yx) {
-      const [y, x] = yxsplit(yx);
-      const offset = (x<5?x:9-x);
-      return offset * 40;
+      movesDone = movesDone || []
+      const movesidx = movesDone.indexOf(yx);
+      if (movesidx>=0) {
+        return movesidx*100;
+      }else{
+        const [y, x] = yxsplit(yx);
+        const offset = (x<5?x:9-x);
+        return (movesDone.length+1)*100 + offset * 60;
+      }
     },
   });
 }
@@ -98,7 +105,11 @@ view.drawMaze = (maze, startPos, pos, movesDone) => {
     } else if (maze[yx]) {
       return colors.open;
     } else if (pos == yx) {
-      return colors.playerPos;
+      if (movesValid.length > 0){
+        return colors.playerPos;
+      } else {
+        return colors.playerPosDeath;
+      }
     } else if (startPos == yx) {
       return colors.startPos;
     } else if (movesDone.includes(yx)) {
@@ -129,7 +140,7 @@ view.drawGame = (gameState) => {
 
 view.drawStats = (gameState) => {
   const scoreElem = document.getElementById("score");
-  scoreElem.textContent = "Score\xa0\xa0\xa0" + (gameState.moves.length + 1) + "p";
+  scoreElem.textContent = "Score\xa0\xa0\xa0" + (gameState.moves.length) + "p";
 
   const maxElem = document.getElementById("max");
   maxElem.textContent = "Max\xa0\xa0\xa0" + Math.max(0, ...gameState.stats) + "p";

@@ -152,7 +152,6 @@ const offCenter = (maze) => {
 
 
 const allSquaresReachableN = (maze, n) => {
-  console.log(encMaze(maze))
   for (let yx = 0; yx < 100; yx++) {
     if (maze[yx]) {
       if (! reachableN(maze,yx,n)) {
@@ -284,23 +283,23 @@ const main = () => {
 // CONTROLLERS
 
 const game = {
-  pos : null,
-  turn : null,
-  moves : null,
-  maze : null,
-  startMaze : null,
-  startPos : null,
-  stats : null,
+  pos : 0,
+  turn : "",
+  moves : [],
+  maze : [],
+  startMaze : [],
+  startPos : 0,
+  stats : [],
 }
 
 const initMazeStatic = () => {
   game.startPos = startPos;
   game.pos = startPos;
-  game.turn = "player";
-  game.moves = [];
+  game.moves = [startPos];
   game.maze = startMaze.clone();
   game.maze[startPos] = false;
   game.startMaze = game.maze;
+  game.turn = "player";
 }
 
 const initMazeRandomStartPos = () => {
@@ -310,10 +309,10 @@ const initMazeRandomStartPos = () => {
     if (game.maze[tryStartPos]) {
       game.startPos = tryStartPos;
       game.pos = tryStartPos;
-      game.turn = "player";
-      game.moves = [];
+      game.moves = [tryStartPos];
       game.maze[tryStartPos] = false;
       game.startMaze = game.maze;
+      game.turn = "player";
       break;
     }
   }
@@ -326,10 +325,10 @@ const initMazeRandom = () => {
     if (game.maze[tryStartPos]) {
       game.startPos = tryStartPos;
       game.pos = tryStartPos;
-      game.turn = "player";
-      game.moves = [];
+      game.moves = [tryStartPos];
       game.maze[tryStartPos] = false;
       game.startMaze = game.maze.clone();
+      game.turn = "player";
       break;
     }
   }
@@ -345,10 +344,12 @@ const initMaze = () => {
     game.stats = []
   }
 
-  view.mazeDisappear().finished.then(()=>{
-    initMazeRandom();
-    view.drawGame(game).finished.then(()=>{
-      view.mazeAppear();
+  view.drawGame(game).finished.then(()=>{
+    view.mazeDisappear(game.moves).finished.then(()=>{
+      initMazeRandom();
+      view.drawGame(game).finished.then(()=>{
+        view.mazeAppear();
+      });
     });
   });
 }
@@ -372,7 +373,7 @@ const playerClick = (move) => {
     }
     // GAME OVER
     if (movesValidNext.length == 0) {
-      game.stats.push(game.moves.length+1);
+      game.stats.push(game.moves.length);
       localStorage.setItem("stats", JSON.stringify(game.stats))
       console.log("Score: " + (game.stats.slice(-1)));
       initMaze();
