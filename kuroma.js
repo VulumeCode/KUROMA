@@ -392,3 +392,10 @@ const clickReset = () => {
 // $(window).resize(function() {
 //     $('body').height( bgHeight + $(window).height() );
 // });
+const initMazeHTML = () => {
+  const mazeEl = document.getElementById("maze")
+  for (var yx = 0; yx < 100; yx++) {
+    mazeEl.innerHTML += (`<div class="box" id="${yx}" onClick="playerClick(${yx});"></div>`)
+  }
+  initMaze();
+}
