@@ -57,10 +57,10 @@ const genMaze = () => {
   mazeCoords = [];
 
   let mazeCols = []
-  for (var y = 0; y < 10; y++) {
+  for (let y = 0; y < 10; y++) {
     let mazeCol = [];
     mazeCols.push(mazeCol);
-    for (var x = 0; x < 10; x++) {
+    for (let x = 0; x < 10; x++) {
       const yx = yxmerge(y,x);
       maze.push(false);
       mazeCol.push(yx);
@@ -92,7 +92,7 @@ const genMaze = () => {
     // case 3 : rotationOp = (yx) => yxflop(yx); break;
   }
   mazeCoords.sort((x,y)=>Math.random() < 0.7 ? 0 : Math.random() < 0.5 ? 1 : -1);
-  for (var i = 30; i < 70; i++) {
+  for (let i = 30; i < 70; i++) {
     yx = rotationOp(mazeCoords[i]);
     maze[yx] = true;
   }
@@ -133,7 +133,7 @@ const decMaze = (code) => {
 }
 
 const allSquaresReachableN = (maze, n) => {
-  for (var yx = 0; yx < 100; yx++) {
+  for (let yx = 0; yx < 100; yx++) {
     if (maze[yx]) {
       if (! reachableN(maze,yx,n)) {
         return false;
@@ -151,8 +151,7 @@ const reachableN = (maze, yx, n) => {
   if (reachable.length == 0) {
     return false;
   }
-  for (var i = reachable.length - 1; i >= 0; i--) {
-    const move = reachable[i];
+  for (let move of reachable) {
     const newMaze = makeMove(move, maze);
     if (reachableN(newMaze, move, n-1)) {
         return true;
@@ -209,8 +208,8 @@ const makeMove = (move, maze) => {
 
 const mazeToStr = (maze,startPos,pos,moves) => {
   let mazeStr = ""
-  for (var y = 0; y < 10; y++) {
-    for (var x = 0; x < 10; x++) {
+  for (let y = 0; y < 10; y++) {
+    for (let x = 0; x < 10; x++) {
       const yx = yxmerge(y,x);
       if (maze[yx]) {
         mazeStr += "■ ";
@@ -241,9 +240,7 @@ var hist = []
 const explore = (pos, maze, movesDone) => {
   const moves = getMoves(pos, maze);
   if (moves.length > 0 && movesDone.length <= 2) {
-    for (var i = moves.length - 1; i >= 0; i--) {
-      const move = moves[i];
-
+    for (let move of moves) {
       const newMaze = makeMove(move,maze);
       explore(move, newMaze, [...movesDone,move]);
     }
@@ -337,6 +334,7 @@ const initMaze = () => {
 
 
 const playerClick = (move) => {
+  console.debug("click", move)
   view.boxClick(move);
 
   const movesValid = getMoves(game.pos,game.maze);
@@ -348,8 +346,7 @@ const playerClick = (move) => {
     game.turn = "player";
 
     const movesValidNext = getMoves(game.pos,game.maze);
-    for (var i = movesValidNext.length - 1; i >= 0; i--) {
-      const moveValidNext = movesValidNext[i];
+    for (let moveValidNext of movesValidNext) {
       view.boxClick(moveValidNext);
     }
     // GAME OVER
@@ -377,9 +374,35 @@ const clickRestart = () => {
 const clickReset = () => {
   localStorage.setItem("stats", JSON.stringify([]))
   initMaze();
-
 }
 
+
+
+const initMazeHTML = () => {
+  const mazeEl = document.getElementById("maze")
+  for (let yx = 0; yx < 100; yx++) {
+    const boxDiv = document.createElement('div');
+    mazeEl.appendChild(boxDiv);
+    boxDiv.id = 'box' + yx;
+    boxDiv.className = 'box';
+    boxDiv.onclick = (()=>playerClick(yx))
+  }
+
+  document.documentElement.style.setProperty("--color-nothing", colors.nothing);
+  document.documentElement.style.setProperty("--color-text", colors.startPos);
+  document.documentElement.style.setProperty("--color-border", colors.playerPos);
+
+  initMaze();
+}
+
+
+
+// const boxMouseDown = (yx) => {
+//   view.boxMouseDown(yx)
+// }
+// const boxMouseUp = (yx) => {
+//   view.boxMouseUp(yx)
+// }
 
 // // infinite scroll TODO throttle
 // $(document).ready(function() {
@@ -397,15 +420,3 @@ const clickReset = () => {
 // $(window).resize(function() {
 //     $('body').height( bgHeight + $(window).height() );
 // });
-const initMazeHTML = () => {
-  const mazeEl = document.getElementById("maze")
-  for (var yx = 0; yx < 100; yx++) {
-    mazeEl.innerHTML += (`<div class="box" id="box${yx}" onClick="playerClick(${yx});"></div>`)
-  }
-
-  document.documentElement.style.setProperty("--color-nothing", colors.nothing);
-  document.documentElement.style.setProperty("--color-text", colors.startPos);
-  document.documentElement.style.setProperty("--color-border", colors.playerPos);
-
-  initMaze();
-}

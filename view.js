@@ -31,6 +31,22 @@ view.boxClick = (yx) => {
     easing: 'easeOutQuad',
   });
 }
+view.boxMouseDown = (yx) => {
+  anime({
+    targets: "#box" + yx ,
+    scale: [1, 0.85],
+    duration: 100,
+    easing: 'easeOutQuad',
+  });
+}
+view.boxMouseUp = (yx) => {
+  anime({
+    targets: "#box" + yx ,
+    scale: [0.85, 1],
+    duration: 100,
+    easing: 'easeOutQuad',
+  });
+}
 
 view.boxAppear = (yx) => {
   anime({
