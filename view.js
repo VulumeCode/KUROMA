@@ -1,14 +1,23 @@
 // public instance
 function view() {}
 
+// const colors = {
+//   validMove: "#fc9867",
+//   open: "#454046",
+//   player: "#ffd866",
+//   start: "#ff6188",
+//   moveDone: "#ff6188",
+//   nothing: "#2c292d",
+//   background: "#2c292d",
+// }
 const colors = {
-  validMove: "#fc9867",
-  open: "#454046",
-  player: "#ffd866",
-  start: "#ff6188",
-  moveDone: "#ff6188",
-  nothing: "#2c292d",
-  background: "#2c292d",
+  validMove: "#F78C6C",
+  open: "#32374D",
+  player: "#FFCB6B",
+  start: "#FF5370",
+  moveDone: "#F07178",
+  nothing: "#292D3E",
+  background: "#292D3E",
 }
 
 
@@ -19,7 +28,7 @@ view.boxClick = (yx) => {
     targets: box,
     scale: [0.85, 1],
     duration: 200,
-    easing: 'linear',
+    easing: 'easeOutQuad',
   });
 }
 
@@ -29,7 +38,7 @@ view.boxAppear = (yx) => {
     targets: box,
     scale: [0, 1],
     duration: 200,
-    easing: 'linear',
+    easing: 'easeOutQuad',
     direction: 'reverse',
   });
 }
@@ -40,7 +49,7 @@ view.mazeAppear = () => {
     scale: [0, 1],
     opacity: 1,
     duration: 100,
-    easing: 'linear',
+    easing: 'easeOutQuad',
     delay: function(el, yx) {
       const [y, x] = yxsplit(yx);
       const offset = (x<5?4-x:x-5);
@@ -55,7 +64,7 @@ view.mazeDisappear = () => {
     scale: [1,0],
     opacity: 0,
     duration: 100,
-    easing: 'linear',
+    easing: 'easeOutQuad',
     delay: function(el, yx) {
       const [y, x] = yxsplit(yx);
       const offset = (x<5?x:9-x);
@@ -93,7 +102,7 @@ view.drawMaze = (maze, startPos, pos, movesDone) => {
       return getColor(yx);
     },
     duration: 200,
-    easing: 'linear',
+    easing: 'easeOutQuad',
   });
 }
 

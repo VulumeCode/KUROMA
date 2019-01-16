@@ -402,5 +402,10 @@ const initMazeHTML = () => {
   for (var yx = 0; yx < 100; yx++) {
     mazeEl.innerHTML += (`<div class="box" id="${yx}" onClick="playerClick(${yx});"></div>`)
   }
+
+  document.documentElement.style.setProperty("--color-nothing", colors.nothing);
+  document.documentElement.style.setProperty("--color-text", colors.start);
+  document.documentElement.style.setProperty("--color-border", colors.player);
+
   initMaze();
 }
