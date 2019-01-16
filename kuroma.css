@@ -85,6 +85,7 @@ h2 {
   font-size: 300%;
   font-weight: bolder;
   font-family: '04b_09';
+  text-align: center;
 }
 .stats {
   display: grid;
