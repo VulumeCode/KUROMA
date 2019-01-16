@@ -28,7 +28,7 @@ view.boxClick = (yx) => {
     targets: box,
     scale: [0.85, 1],
     duration: 200,
-    easing: 'linear',
+    easing: 'easeOutQuad',
   });
 }
 
@@ -38,7 +38,7 @@ view.boxAppear = (yx) => {
     targets: box,
     scale: [0, 1],
     duration: 200,
-    easing: 'linear',
+    easing: 'easeOutQuad',
     direction: 'reverse',
   });
 }
@@ -49,7 +49,7 @@ view.mazeAppear = () => {
     scale: [0, 1],
     opacity: 1,
     duration: 100,
-    easing: 'linear',
+    easing: 'easeOutQuad',
     delay: function(el, yx) {
       const [y, x] = yxsplit(yx);
       const offset = (x<5?4-x:x-5);
@@ -64,7 +64,7 @@ view.mazeDisappear = () => {
     scale: [1,0],
     opacity: 0,
     duration: 100,
-    easing: 'linear',
+    easing: 'easeOutQuad',
     delay: function(el, yx) {
       const [y, x] = yxsplit(yx);
       const offset = (x<5?x:9-x);
@@ -102,7 +102,7 @@ view.drawMaze = (maze, startPos, pos, movesDone) => {
       return getColor(yx);
     },
     duration: 200,
-    easing: 'linear',
+    easing: 'easeOutQuad',
   });
 }
 
