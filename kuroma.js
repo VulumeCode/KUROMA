@@ -101,12 +101,15 @@ const genMaze = () => {
     throw ("gen maze wrong nr sq:"+countSquares(maze)+"\n" + mazeToStr(maze,null,null,[]));
   }
 
-  if (! allSquaresReachableN(maze,25)) {
+  if (offCenter(maze) != 0) {
+    console.debug("gen offcenter:\n"+ encMaze(maze));
+    maze = genMaze(); // try again
+  } else if (! allSquaresReachableN(maze,25)) {
     console.debug("gen maze not all reachable:\n"+ encMaze(maze));
     maze = genMaze(); // try again
   }
 
-  // TODO center to avg(x)
+
   return maze;
 }
 
@@ -132,7 +135,24 @@ const decMaze = (code) => {
   return maze;
 }
 
+
+const offCenter = (maze) => {
+  let xsum = 0;
+  let xcount = 0;
+  for (let y = 0; y < 10; y++) {
+    for (let x = 0; x < 10; x++) {
+      if(maze[yxmerge(y,x)]){
+        xsum += x;
+        xcount += 1;
+      }
+    }
+  }
+  return Math.trunc((xsum/xcount)-4.5)
+}
+
+
 const allSquaresReachableN = (maze, n) => {
+  console.log(encMaze(maze))
   for (let yx = 0; yx < 100; yx++) {
     if (maze[yx]) {
       if (! reachableN(maze,yx,n)) {
@@ -154,12 +174,11 @@ const reachableN = (maze, yx, n) => {
   for (let move of reachable) {
     const newMaze = makeMove(move, maze);
     if (reachableN(newMaze, move, n-1)) {
-        return true;
+      return true;
     }
   }
   return false ;
 }
-
 
 const countSquares = (maze) => {
   return maze.reduce((x,y)=>x+y,0);
