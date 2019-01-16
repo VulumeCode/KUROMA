@@ -12,6 +12,8 @@
 }
 
 body, html {
+  scroll-behavior: smooth;
+
   background-color: var(--color-nothing);
 
   height: 100vh;

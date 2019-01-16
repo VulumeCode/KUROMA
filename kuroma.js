@@ -400,12 +400,12 @@ const clickReset = () => {
 const initMazeHTML = () => {
   const mazeEl = document.getElementById("maze")
   for (var yx = 0; yx < 100; yx++) {
-    mazeEl.innerHTML += (`<div class="box" id="${yx}" onClick="playerClick(${yx});"></div>`)
+    mazeEl.innerHTML += (`<div class="box" id="box${yx}" onClick="playerClick(${yx});"></div>`)
   }
 
   document.documentElement.style.setProperty("--color-nothing", colors.nothing);
-  document.documentElement.style.setProperty("--color-text", colors.start);
-  document.documentElement.style.setProperty("--color-border", colors.player);
+  document.documentElement.style.setProperty("--color-text", colors.startPos);
+  document.documentElement.style.setProperty("--color-border", colors.playerPos);
 
   initMaze();
 }

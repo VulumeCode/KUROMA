@@ -4,18 +4,19 @@ function view() {}
 // const colors = {
 //   validMove: "#fc9867",
 //   open: "#454046",
-//   player: "#ffd866",
-//   start: "#ff6188",
+//   playerPos: "#ffd866",
+//   startPos: "#ff6188",
 //   moveDone: "#ff6188",
 //   nothing: "#2c292d",
 //   background: "#2c292d",
 // }
 const colors = {
-  validMove: "#F78C6C",
+  // base16 materialtheme
+  validMove: "#676E95",
   open: "#32374D",
-  player: "#FFCB6B",
-  start: "#FF5370",
-  moveDone: "#F07178",
+  playerPos: "#89DDFF",
+  startPos: "#FF5370",
+  moveDone: "#FF5370",
   nothing: "#292D3E",
   background: "#292D3E",
 }
@@ -23,9 +24,8 @@ const colors = {
 
 
 view.boxClick = (yx) => {
-  const box = document.getElementById(yx);
   anime({
-    targets: box,
+    targets: "#box" + yx ,
     scale: [0.85, 1],
     duration: 200,
     easing: 'easeOutQuad',
@@ -33,9 +33,8 @@ view.boxClick = (yx) => {
 }
 
 view.boxAppear = (yx) => {
-  const box = document.getElementById(yx);
   anime({
-    targets: box,
+    targets: "#box"+yx,
     scale: [0, 1],
     duration: 200,
     easing: 'easeOutQuad',
@@ -43,9 +42,8 @@ view.boxAppear = (yx) => {
   });
 }
 view.mazeAppear = () => {
-  const boxes = document.getElementsByClassName("box");
   return anime({
-    targets: boxes,
+    targets: ".box",
     scale: [0, 1],
     opacity: 1,
     duration: 100,
@@ -58,9 +56,8 @@ view.mazeAppear = () => {
   });
 }
 view.mazeDisappear = () => {
-  const boxes = document.getElementsByClassName("box");
   return anime({
-    targets: boxes,
+    targets: ".box",
     scale: [1,0],
     opacity: 0,
     duration: 100,
@@ -85,9 +82,9 @@ view.drawMaze = (maze, startPos, pos, movesDone) => {
     } else if (maze[yx]) {
       return colors.open;
     } else if (pos == yx) {
-      return colors.player;
+      return colors.playerPos;
     } else if (startPos == yx) {
-      return colors.start;
+      return colors.startPos;
     } else if (movesDone.includes(yx)) {
       return colors.moveDone;
     } else {
