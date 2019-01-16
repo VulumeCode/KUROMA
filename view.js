@@ -1,14 +1,23 @@
 // public instance
 function view() {}
 
+// const colors = {
+//   validMove: "#fc9867",
+//   open: "#454046",
+//   player: "#ffd866",
+//   start: "#ff6188",
+//   moveDone: "#ff6188",
+//   nothing: "#2c292d",
+//   background: "#2c292d",
+// }
 const colors = {
-  validMove: "#fc9867",
-  open: "#454046",
-  player: "#ffd866",
-  start: "#ff6188",
-  moveDone: "#ff6188",
-  nothing: "#2c292d",
-  background: "#2c292d",
+  validMove: "#F78C6C",
+  open: "#32374D",
+  player: "#FFCB6B",
+  start: "#FF5370",
+  moveDone: "#F07178",
+  nothing: "#292D3E",
+  background: "#292D3E",
 }
 
 
