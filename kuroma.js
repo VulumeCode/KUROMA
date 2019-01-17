@@ -373,7 +373,7 @@ const playerClick = (move) => {
     }
     // GAME OVER
     if (movesValidNext.length == 0) {
-      game.stats.push(game.moves.length);
+      game.stats.push(game.moves.length-1);
       localStorage.setItem("stats", JSON.stringify(game.stats))
       console.log("Score: " + (game.stats.slice(-1)));
       initMaze();

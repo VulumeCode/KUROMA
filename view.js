@@ -140,7 +140,7 @@ view.drawGame = (gameState) => {
 
 view.drawStats = (gameState) => {
   const scoreElem = document.getElementById("score");
-  scoreElem.textContent = "Score\xa0\xa0\xa0" + (gameState.moves.length) + "p";
+  scoreElem.textContent = "Score\xa0\xa0\xa0" + (gameState.moves.length-1) + "p";
 
   const maxElem = document.getElementById("max");
   maxElem.textContent = "Max\xa0\xa0\xa0" + Math.max(0, ...gameState.stats) + "p";
