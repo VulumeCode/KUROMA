@@ -163,3 +163,12 @@ view.drawStats = (gameState) => {
   const recentStats = gameState.stats.slice(-3);
   rankElem.textContent = "Rank\xa0\xa0\xa0#" + Math.floor(100 - (100 * ((recentStats.reduce((a, b) => a + b, 0) / (40 * recentStats.length)) || 0)));
 }
+
+view.enterFullscreen = () => {
+  let elem = document.querySelector(":root");
+  if (elem.webkitRequestFullScreen) {
+    elem.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+  } else {
+    elem.mozRequestFullScreen();
+  }
+}
