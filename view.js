@@ -15,6 +15,8 @@ const colors = {
   validMove: "#676E95",
   open: "#32374D",
   playerPos: "#89DDFF",
+  player1Pos: "#89DDFF",
+  player2Pos: "#C3E88D",
   playerPosDeath: "#FF5370",
   startPos: "#FF5370",
   moveDone: "#FF5370",
@@ -95,7 +97,7 @@ view.mazeDisappear = (movesDone) => {
 
 
 
-view.drawMaze = (maze, startPos, pos, movesDone) => {
+view.drawMaze = (maze, startPos, pos, movesDone, turn) => {
   movesDone = movesDone || [];
 
   const movesValid = getMoves(pos, maze);
@@ -106,7 +108,14 @@ view.drawMaze = (maze, startPos, pos, movesDone) => {
       return colors.open;
     } else if (pos == yx) {
       if (movesValid.length > 0){
-        return colors.playerPos;
+        switch (turn) {
+          case "player1":
+            return colors.player1Pos;
+          case "player2":
+            return colors.player2Pos;
+          default:
+            return colors.playerPos;
+        }
       } else {
         return colors.playerPosDeath;
       }
@@ -135,12 +144,14 @@ view.drawMaze = (maze, startPos, pos, movesDone) => {
 
 view.drawGame = (gameState) => {
   view.drawStats(gameState)
-  return view.drawMaze(gameState.maze, gameState.startPos, gameState.pos, gameState.moves)
+  return view.drawMaze(gameState.maze, gameState.startPos, gameState.pos, gameState.moves, gameState.turn)
 }
 
 view.drawStats = (gameState) => {
   const scoreElem = document.getElementById("score");
-  scoreElem.textContent = "Score\xa0\xa0\xa0" + (gameState.moves.length-1) + "p";
+  scoreElem.textContent =
+    gameState.statsp1 + "\xa0<\xa0" + Math.max(0,gameState.moves.length-1) + "\xa0>\xa0" + gameState.statsp2 ;
+  // scoreElem.textContent = "Score\xa0\xa0\xa0" + (gameState.moves.length-1) + "p";
 
   const maxElem = document.getElementById("max");
   maxElem.textContent = "Max\xa0\xa0\xa0" + Math.max(0, ...gameState.stats) + "p";

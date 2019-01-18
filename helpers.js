@@ -7,6 +7,20 @@ Array.prototype.swap = function (a,b) {
   [this[a],this[b]] = [this[b],this[a]];
 }
 
+Array.prototype.shuffle = function() {
+    for (var i = this.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = this[i];
+        this[i] = this[j];
+        this[j] = temp;
+    }
+}
+
+
+
+
+
+
 window.devtoolsFormatters = [{
   header: function(obj){
     if (obj instanceof Array){
