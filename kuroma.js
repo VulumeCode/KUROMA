@@ -431,8 +431,9 @@ const clickReset = () => {
 }
 
 const setAI = (ai_name) => {
+  document.querySelector(".active").classList.remove("active");
   game.ai = ai[ai_name];
-  console.debug("set ai:" + ai_name +" (found "+!!game.ai+")");
+  document.getElementById(ai_name).classList.add("active");
 }
 
 

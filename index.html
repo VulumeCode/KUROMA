@@ -30,23 +30,23 @@
   <div id="score"></div>
   <div id="max"></div>
   <div id="games"></div>
-  <div id="rank"></div>
+  <!-- <div id="rank"></div> -->
 </div>
 <h2>KUROMA</h2>
 <h1>黒馬</h1>
-<h2 onclick="view.enterFullscreen()">- Fullscreen -</h2>
+<h2 onclick="view.enterFullscreen()">Fullscreen</h2>
 <h1>黒馬</h1>
-<h2 onClick="clickRestart();">- Restart -</h2>
+<h2 onClick="clickRestart();">Restart</h2>
 <h1>黒馬</h1>
-<h2 onClick="initMaze();">- New Game -</h2>
+<h2 onClick="initMaze();">New Game</h2>
 <h1>黒馬</h1>
 <h2>Choose AI</h2>
-<h3 onclick="setAI('none')">- Dummy -</h3>
-<h3 onclick="setAI('zen')">- Zen -</h3>
-<h3 onclick="setAI('leastmoves')">- Samurai -</h3>
-<h3 onclick="setAI('killormostmoves')">- Ronin -</h3>
-<h3 onclick="setAI('killorsurvive')">- Ninja -</h3>
+<div id="none" class="aiButton  active" onclick="setAI('none')">- Dummy -</div>
+<div id="zen" class="aiButton" onclick="setAI('zen')">- Zen -</div>
+<div id="leastmoves" class="aiButton" onclick="setAI('leastmoves')">- Samurai -</div>
+<div id="killormostmoves" class="aiButton" onclick="setAI('killormostmoves')">- Ronin -</div>
+<div id="killorsurvive" class="aiButton" onclick="setAI('killorsurvive')">- Ninja -</div>
 <h1>黒馬</h1>
-<h2 onClick="clickReset();">- Reset Score -</h2>
+<h2 onClick="clickReset();">Reset Score</h2>
 </body>
 </html>

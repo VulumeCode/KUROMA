@@ -159,9 +159,9 @@ view.drawStats = (gameState) => {
   const gamesElem = document.getElementById("games");
   gamesElem.textContent = "Games\xa0\xa0\xa0" + gameState.stats.length;
 
-  const rankElem = document.getElementById("rank");
-  const recentStats = gameState.stats.slice(-3);
-  rankElem.textContent = "Rank\xa0\xa0\xa0#" + Math.floor(100 - (100 * ((recentStats.reduce((a, b) => a + b, 0) / (40 * recentStats.length)) || 0)));
+  // const rankElem = document.getElementById("rank");
+  // const recentStats = gameState.stats.slice(-3);
+  // rankElem.textContent = "Rank\xa0\xa0\xa0#" + Math.floor(100 - (100 * ((recentStats.reduce((a, b) => a + b, 0) / (40 * recentStats.length)) || 0)));
 }
 
 view.enterFullscreen = () => {
