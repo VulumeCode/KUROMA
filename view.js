@@ -15,8 +15,8 @@ const colors = {
   validMove: "#676E95",
   open: "#32374D",
   playerPos: "#89DDFF",
-  player1Pos: "#89DDFF",
-  player2Pos: "#C3E88D",
+  humanPos: "#89DDFF",
+  computerPos: "#C3E88D",
   playerPosDeath: "#FF5370",
   startPos: "#FF5370",
   moveDone: "#FF5370",
@@ -85,11 +85,11 @@ view.mazeDisappear = (movesDone) => {
       movesDone = movesDone || []
       const movesidx = movesDone.indexOf(yx);
       if (movesidx>=0) {
-        return movesidx*100;
+        return 500+ movesidx*100;
       }else{
         const [y, x] = yxsplit(yx);
         const offset = (x<5?x:9-x);
-        return (movesDone.length+1)*100 + offset * 60;
+        return 500+ (movesDone.length+1)*100 + offset * 60;
       }
     },
   });
@@ -109,10 +109,10 @@ view.drawMaze = (maze, startPos, pos, movesDone, turn) => {
     } else if (pos == yx) {
       if (movesValid.length > 0){
         switch (turn) {
-          case "player1":
-            return colors.player1Pos;
-          case "player2":
-            return colors.player2Pos;
+          case "human":
+            return colors.humanPos;
+          case "computer":
+            return colors.computerPos;
           default:
             return colors.playerPos;
         }
@@ -150,7 +150,7 @@ view.drawGame = (gameState) => {
 view.drawStats = (gameState) => {
   const scoreElem = document.getElementById("score");
   scoreElem.textContent =
-    gameState.statsp1 + "\xa0<\xa0" + Math.max(0,gameState.moves.length-1) + "\xa0>\xa0" + gameState.statsp2 ;
+    gameState.statsComputer + "\xa0<\xa0" + Math.max(0,gameState.moves.length-1) + "\xa0>\xa0" + gameState.statsHuman ;
   // scoreElem.textContent = "Score\xa0\xa0\xa0" + (gameState.moves.length-1) + "p";
 
   const maxElem = document.getElementById("max");

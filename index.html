@@ -16,6 +16,7 @@
 <script src="jquery-3.3.1.js"></script>
 
 <script src="helpers.js"></script>
+<script src="ai.js"></script>
 <script src="view.js"></script>
 <script src="kuroma.js"></script>
 
@@ -33,12 +34,19 @@
 </div>
 <h2>KUROMA</h2>
 <h1>黒馬</h1>
-<h2 onClick="clickRestart();">Restart</h2>
+<h2 onclick="view.enterFullscreen()">- Fullscreen -</h2>
 <h1>黒馬</h1>
-<h2 onClick="initMaze();">New Game</h2>
+<h2 onClick="clickRestart();">- Restart -</h2>
 <h1>黒馬</h1>
-<h2 onClick="clickReset();">Reset Score</h2>
+<h2 onClick="initMaze();">- New Game -</h2>
 <h1>黒馬</h1>
-<h2 onclick="view.enterFullscreen()">Fullscreen</h2>
+<h2>Choose AI</h2>
+<h3 onclick="setAI('none')">- Dummy -</h3>
+<h3 onclick="setAI('zen')">- Zen -</h3>
+<h3 onclick="setAI('leastmoves')">- Samurai -</h3>
+<h3 onclick="setAI('killormostmoves')">- Ronin -</h3>
+<h3 onclick="setAI('killorsurvive')">- Ninja -</h3>
+<h1>黒馬</h1>
+<h2 onClick="clickReset();">- Reset Score -</h2>
 </body>
 </html>

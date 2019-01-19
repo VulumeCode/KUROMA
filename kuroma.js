@@ -102,11 +102,13 @@ const genMaze = () => {
   }
 
   if (offCenter(maze) != 0) {
-    console.debug("gen offcenter:\n"+ encMaze(maze));
+    console.debug("gen offcenter:\ndecMaze(\""+ encMaze(maze)+"\")");
     maze = genMaze(); // try again
   } else if (! allSquaresReachableN(maze,25)) {
-    console.debug("gen maze not all reachable:\n"+ encMaze(maze));
+    console.debug("gen maze not all reachable:\ndecMaze(\""+ encMaze(maze)+"\")");
     maze = genMaze(); // try again
+  } else {
+    console.debug("good maze!\ndecMaze(\""+ encMaze(maze)+"\")");
   }
 
 
@@ -235,7 +237,7 @@ const mazeToStr = (maze,startPos,pos,moves) => {
         mazeStr += "@ ";
       } else if (startPos == yx) {
         mazeStr += "O ";
-      } else if (moves.includes(yx)) {
+      } else if (!!moves && moves.includes(yx)) {
         mazeStr += "x ";
       } else {
         mazeStr += "  ";
@@ -282,6 +284,7 @@ const main = () => {
 
 // CONTROLLERS
 
+
 const game = {
   pos : 0,
   turn : "",
@@ -290,8 +293,9 @@ const game = {
   startMaze : [],
   startPos : 0,
   stats : [],
-  statsp1 : 0,
-  statsp2 : 0,
+  statsComputer : 0,
+  statsHuman : 0,
+  ai : ai.none,
 }
 
 const initMazeStatic = () => {
@@ -301,7 +305,7 @@ const initMazeStatic = () => {
   game.maze = startMaze.clone();
   game.maze[startPos] = false;
   game.startMaze = game.maze;
-  game.turn = "player1";
+  game.turn = "human";
 }
 
 const initMazeRandomStartPos = () => {
@@ -314,7 +318,7 @@ const initMazeRandomStartPos = () => {
       game.moves = [tryStartPos];
       game.maze[tryStartPos] = false;
       game.startMaze = game.maze;
-      game.turn = "player1";
+      game.turn = "human";
       break;
     }
   }
@@ -330,7 +334,7 @@ const initMazeRandom = () => {
       game.moves = [tryStartPos];
       game.maze[tryStartPos] = false;
       game.startMaze = game.maze.clone();
-      game.turn = "player1";
+      game.turn = "human";
       break;
     }
   }
@@ -367,18 +371,7 @@ const playerClick = (move) => {
     game.maze = makeMove(move,game.maze);
 
     game.pos = move;
-    switch (game.turn) {
-      case "player1":
-        game.turn = "player2";
-        setTimeout(function(){
-          playerClick(minimax(game.pos,game.maze))
-        },800);
-        break;
-      case "player2":
-        game.turn = "player1";
-        break;
-      default:
-    }
+
 
 
     const movesValidNext = getMoves(game.pos,game.maze);
@@ -388,8 +381,8 @@ const playerClick = (move) => {
     // GAME OVER
     if (movesValidNext.length == 0) {
       switch (game.turn) {
-        case "player1": game.statsp1+=game.moves.length-1;break;
-        case "player2": game.statsp2+=game.moves.length-1;break;
+        case "computer": game.statsComputer+=game.moves.length-1;break;
+        case "human": game.statsHuman+=game.moves.length-1;break;
       }
 
       game.stats.push(game.moves.length-1);
@@ -397,6 +390,20 @@ const playerClick = (move) => {
       console.log("Score: " + (game.stats.slice(-1)));
       initMaze();
     } else {
+      switch (game.turn) {
+        case "human":
+          game.turn = "computer";
+          setTimeout(function(){
+            playerClick(game.ai(game.pos,game.maze))
+          },800);
+          break;
+        case "computer":
+          game.turn = "human";
+          break;
+        default:
+      }
+
+
       view.drawGame(game);
     }
   }
@@ -407,7 +414,7 @@ const clickRestart = () => {
 
   game.startPos = game.startPos;
   game.pos = game.startPos;
-  game.turn = "player1";
+  game.turn = "human";
   game.moves = [];
   game.maze = game.startMaze;
   game.startMaze = game.maze;
@@ -417,11 +424,17 @@ const clickRestart = () => {
 const clickReset = () => {
   $(window).scrollTop(0);
 
-  game.statsp1 = 0;
-  game.statsp2 = 0;
+  game.statsComputer = 0;
+  game.statsHuman = 0;
   localStorage.setItem("stats", JSON.stringify([]))
   initMaze();
 }
+
+const setAI = (ai_name) => {
+  game.ai = ai[ai_name];
+  console.debug("set ai:" + ai_name +" (found "+!!game.ai+")");
+}
+
 
 
 
@@ -467,21 +480,3 @@ const initMazeHTML = () => {
 // $(window).resize(function() {
 //     $('body').height( bgHeight + $(window).height() );
 // });
-
-
-
-const minimax = (pos,maze) => {
-  let bestMove = null;
-  let bestMoveScore = 666;
-  const movesValid = getMoves(pos,maze);
-  movesValid.shuffle();
-  for (const move of movesValid) {
-    const newMaze = makeMove(move, maze);
-    const moveScore =getMoves(move,maze).length;
-    if (moveScore < bestMoveScore){
-      bestMove = move;
-      bestMoveScore = moveScore;
-    }
-  }
-  return bestMove;
-}
