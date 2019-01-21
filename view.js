@@ -32,7 +32,7 @@ view.boxClick = (yx) => {
     scale: [0.85, 1],
     duration: 200,
     easing: 'easeOutQuad',
-  });
+  })
 }
 view.boxMouseDown = (yx) => {
   anime({
@@ -40,7 +40,7 @@ view.boxMouseDown = (yx) => {
     scale: [1, 0.85],
     duration: 100,
     easing: 'easeOutQuad',
-  });
+  })
 }
 view.boxMouseUp = (yx) => {
   anime({
@@ -48,7 +48,7 @@ view.boxMouseUp = (yx) => {
     scale: [0.85, 1],
     duration: 100,
     easing: 'easeOutQuad',
-  });
+  })
 }
 
 view.boxAppear = (yx) => {
@@ -58,7 +58,7 @@ view.boxAppear = (yx) => {
     duration: 200,
     easing: 'easeOutQuad',
     direction: 'reverse',
-  });
+  })
 }
 view.mazeAppear = () => {
   return anime({
@@ -68,11 +68,11 @@ view.mazeAppear = () => {
     duration: 100,
     easing: 'easeOutQuad',
     delay: function(el, yx) {
-      const [y, x] = yxsplit(yx);
-      const offset = (x<5?4-x:x-5);
-      return offset * 40;
+      const [y, x] = yxsplit(yx)
+      const offset = (x<5?4-x:x-5)
+      return offset * 40
     },
-  });
+  })
 }
 view.mazeDisappear = (movesDone) => {
   return anime({
@@ -83,60 +83,60 @@ view.mazeDisappear = (movesDone) => {
     easing: 'easeOutQuad',
     delay: function(el, yx) {
       movesDone = movesDone || []
-      const movesidx = movesDone.indexOf(yx);
+      const movesidx = movesDone.indexOf(yx)
       if (movesidx>=0) {
-        return 500+ movesidx*100;
+        return 500+ movesidx*100
       }else{
-        const [y, x] = yxsplit(yx);
-        const offset = (x<5?x:9-x);
-        return 500+ (movesDone.length+1)*100 + offset * 60;
+        const [y, x] = yxsplit(yx)
+        const offset = (x<5?x:9-x)
+        return 500+ (movesDone.length+1)*100 + offset * 60
       }
     },
-  });
+  })
 }
 
 
 
 view.drawMaze = (maze, startPos, pos, movesDone, turn) => {
-  movesDone = movesDone || [];
+  movesDone = movesDone || []
 
-  const movesValid = getMoves(pos, maze);
+  const movesValid = getMoves(pos, maze)
   const getColor = (yx) => {
     if (movesValid.includes(yx)) {
-      return colors.validMove;
+      return colors.validMove
     } else if (maze[yx]) {
-      return colors.open;
+      return colors.open
     } else if (pos == yx) {
       if (movesValid.length > 0){
         switch (turn) {
           case "human":
-            return colors.humanPos;
+            return colors.humanPos
           case "computer":
-            return colors.computerPos;
+            return colors.computerPos
           default:
-            return colors.playerPos;
+            return colors.playerPos
         }
       } else {
-        return colors.playerPosDeath;
+        return colors.playerPosDeath
       }
     } else if (startPos == yx) {
-      return colors.startPos;
+      return colors.startPos
     } else if (movesDone.includes(yx)) {
-      return colors.moveDone;
+      return colors.moveDone
     } else {
-      return colors.nothing;
-    };
+      return colors.nothing
+    }
   }
-  const boxes = document.getElementsByClassName("box");
+  const boxes = document.getElementsByClassName("box")
 
   return anime({
     targets: boxes,
     backgroundColor: function(el, yx) {
-      return getColor(yx);
+      return getColor(yx)
     },
     duration: 200,
     easing: 'easeOutQuad',
-  });
+  })
 }
 
 
@@ -148,27 +148,27 @@ view.drawGame = (gameState) => {
 }
 
 view.drawStats = (gameState) => {
-  const scoreElem = document.getElementById("score");
+  const scoreElem = document.getElementById("score")
   scoreElem.textContent =
-    gameState.statsComputer + "\xa0<\xa0" + Math.max(0,gameState.moves.length-1) + "\xa0>\xa0" + gameState.statsHuman ;
-  // scoreElem.textContent = "Score\xa0\xa0\xa0" + (gameState.moves.length-1) + "p";
+    gameState.statsComputer + "\xa0\xa0<CPU\xa0\xa0" + Math.max(0,gameState.moves.length-1) + "\xa0\xa0YOU>\xa0\xa0" + gameState.statsHuman
+  // scoreElem.textContent = "Score\xa0\xa0\xa0" + (gameState.moves.length-1) + "p"
 
-  const maxElem = document.getElementById("max");
-  maxElem.textContent = "Max\xa0\xa0\xa0" + Math.max(0, ...gameState.stats) + "p";
+  const maxElem = document.getElementById("max")
+  maxElem.textContent = "Max\xa0\xa0\xa0::\xa0\xa0\xa0" + Math.max(0, ...gameState.stats)
 
-  const gamesElem = document.getElementById("games");
-  gamesElem.textContent = "Games\xa0\xa0\xa0" + gameState.stats.length;
+  const gamesElem = document.getElementById("games")
+  gamesElem.textContent = "Games\xa0\xa0\xa0::\xa0\xa0\xa0" + gameState.stats.length
 
-  // const rankElem = document.getElementById("rank");
-  // const recentStats = gameState.stats.slice(-3);
-  // rankElem.textContent = "Rank\xa0\xa0\xa0#" + Math.floor(100 - (100 * ((recentStats.reduce((a, b) => a + b, 0) / (40 * recentStats.length)) || 0)));
+  const rankElem = document.getElementById("rank")
+  const recentStats = gameState.stats.slice(-5)
+  rankElem.textContent = "Rank\xa0\xa0\xa0::\xa0\xa0\xa0#" + Math.floor(100 - (100 * ((recentStats.reduce((a, b) => a + b, 0) / (40 * recentStats.length)) || 0)))
 }
 
 view.enterFullscreen = () => {
-  let elem = document.querySelector(":root");
+  let elem = document.querySelector(":root")
   if (elem.webkitRequestFullScreen) {
-    elem.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+    elem.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT)
   } else {
-    elem.mozRequestFullScreen();
+    elem.mozRequestFullScreen()
   }
 }

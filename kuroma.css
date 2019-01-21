@@ -84,11 +84,12 @@ h2 {
   padding: 24px;
   margin: 16px auto;
   color:  var(--color-text);
-  font-size: 150%;
+  font-size: 200%;
   font-weight: 600;
   font-family: 'teko';
 }
 .stats div {
   margin: 0  ;
-  text-align: center;
+  text-align:center;
+  height:40px;
 }
