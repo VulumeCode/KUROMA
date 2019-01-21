@@ -6,15 +6,6 @@
   --color-border: none;
 }
 
-@font-face {
-  font-family: "display";
-  /* src: url(04B_09__.TTF) format("truetype"); */
-  src: url(OCRA.ttf) format("truetype");
-  /* src: url(acknowtt.ttf) format("truetype"); */
-  /* src: url(pxlxxl.ttf) format("truetype"); */
-}
-
-
 
 body, html {
   scroll-behavior: smooth;
@@ -67,8 +58,8 @@ h2 {
   margin: 24px auto 16px auto;
   color:  var(--color-text);
   font-size: 300%;
-  font-weight: bolder;
-  font-family: 'display';
+  font-weight: 600;
+  font-family: 'teko';
 }
 .aiButton  {
   position: relative;
@@ -76,8 +67,8 @@ h2 {
   margin: 16px auto;
   color:  var(--color-text);
   font-size: 150%;
-  font-weight: bolder;
-  font-family: 'display';
+  font-weight: 600;
+  font-family: 'teko';
   text-align: center;
 }
 .aiButton.active {
@@ -94,8 +85,8 @@ h2 {
   margin: 16px auto;
   color:  var(--color-text);
   font-size: 150%;
-  font-weight: bolder;
-  font-family: 'display';
+  font-weight: 600;
+  font-family: 'teko';
 }
 .stats div {
   margin: 0  ;
