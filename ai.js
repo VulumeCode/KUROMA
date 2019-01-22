@@ -1,10 +1,6 @@
 // public instance
 function ai() {}
 
-ai.none = (pos,maze) => {
-  return null
-}
-
 ai.leastmoves = (pos,maze) => {
   let bestMove = null // lower is better, 0 is best
   let bestMoveScore = 666

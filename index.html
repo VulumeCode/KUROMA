@@ -28,12 +28,13 @@
     <div class="panel">
       <h1>黒馬</h1>
       <h2 onClick="initMaze();">New Game</h2>
-      <h2>Choose AI</h2>
-      <div id="none" class="aiButton  active" onclick="setAI('none')">- Dummy -</div>
-      <div id="zen" class="aiButton" onclick="setAI('zen')">- Zen -</div>
-      <div id="leastmoves" class="aiButton" onclick="setAI('leastmoves')">- Samurai -</div>
-      <div id="killormostmoves" class="aiButton" onclick="setAI('killormostmoves')">- Ronin -</div>
-      <div id="killorsurvive" class="aiButton" onclick="setAI('killorsurvive')">- Ninja -</div>
+      <h2>Choose VS</h2>
+      <div id="self" class="aiButton  active" onclick="setVSSelf()">- 1 Player -</div>
+      <div id="other" class="aiButton" onclick="setVSOther()">- 2 Player -</div>
+      <div id="zen" class="aiButton" onclick="setVSAI('zen')">- AI:Zen -</div>
+      <div id="leastmoves" class="aiButton" onclick="setVSAI('leastmoves')">- AI:Samurai -</div>
+      <div id="killormostmoves" class="aiButton" onclick="setVSAI('killormostmoves')">- AI:Ronin -</div>
+      <div id="killorsurvive" class="aiButton" onclick="setVSAI('killorsurvive')">- AI:Ninja -</div>
       <h2 onclick="view.enterFullscreen()">Fullscreen</h2>
       <h2 onClick="clickRestart();">Restart</h2>
       <h2 onClick="clickReset();">Reset Score</h2>
@@ -52,7 +53,7 @@
         <div id="games"></div>
         <div id="rank"></div>
       </div>
-      <h2>KUROMA</h2>
+      <h2 class="title">KUROMA</h2>
     </div>
   </div>
 

@@ -76,25 +76,39 @@ h2 {
   font-weight: 600;
   font-family: 'teko';
 }
+h2:hover {
+  color: #F78C6C;
+}
+
+h2.title {
+  margin: auto;
+
+}
 .aiButton  {
   position: relative;
   height: 5%;
-  margin: -5px auto 11px auto;
+  margin: -5px auto 9px auto;
   color:  var(--color-text);
   font-size: 150%;
   font-weight: 600;
   font-family: 'teko';
   text-align: center;
 }
-.aiButton.active {
-  color:  var(--color-border);
+
+.aiButton:hover {
+  color: #F78C6C;
 }
+.aiButton.active {
+  color:  #C3E88D;
+}
+
 .stats {
   width: 240px;
+  height: 40%;
   display: grid;
   grid-template-rows: repeat(3, 16);
   grid-gap: 16px;
-  border: solid  var(--color-border);
+  border: solid   #C3E88D;
   border-width: 16px;
   padding: 24px;
   margin: 10% auto;

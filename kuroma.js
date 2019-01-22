@@ -288,6 +288,8 @@ const main = () => {
 const game = {
   pos : 0,
   turn : "",
+  mode : "",
+  vs : "",
   moves : [],
   maze : [],
   startMaze : [],
@@ -362,7 +364,66 @@ const initMaze = () => {
 
 
 const playerClick = (move) => {
-  console.debug("click", move)
+  console.debug("click human", move)
+  view.boxClick(move)
+
+  const movesValid = getMoves(game.pos,game.maze)
+  // TODO tap movesValid
+
+  if ( ! ["human","other"].includes(game.turn) ) {
+    console.warn("Not your turn")
+  }
+
+  if(["human","other"].includes(game.turn) && movesValid.includes(move)){
+    game.moves.push(move)
+    game.maze = makeMove(move,game.maze)
+
+    game.pos = move
+
+    const movesValidNext = getMoves(game.pos,game.maze)
+    for (let moveValidNext of movesValidNext) {
+      view.boxClick(moveValidNext)
+    }
+    // GAME OVER
+    if (movesValidNext.length == 0) {
+      switch (game.turn) {
+        case "human": game.statsHuman+=game.moves.length-1;break;
+        default: game.statsComputer+=game.moves.length-1;break;
+      }
+
+      game.stats.push(game.moves.length-1)
+      localStorage.setItem("stats", JSON.stringify(game.stats))
+      console.log("Score: " + (game.stats.slice(-1)))
+      initMaze()
+    } else {
+      switch (game.vs) {
+        case "computer":
+          game.turn = "computer"
+          setTimeout(function(){
+            aiClick(game.ai(game.pos,game.maze))
+          },800)
+          break
+        case "self":
+          break
+        case "other":
+          game.turn = "other"
+          break
+        default:
+          throw ("game.vs invalid: " + game.vs)
+      }
+      view.drawGame(game)
+    }
+  }
+}
+
+
+const aiClick = (move) => {
+  if (game.turn != "computer") {
+    throw ("Not AI's turn")
+  }
+
+
+  console.debug("click computer", move)
   view.boxClick(move)
 
   const movesValid = getMoves(game.pos,game.maze)
@@ -372,8 +433,6 @@ const playerClick = (move) => {
 
     game.pos = move
 
-
-
     const movesValidNext = getMoves(game.pos,game.maze)
     for (let moveValidNext of movesValidNext) {
       view.boxClick(moveValidNext)
@@ -382,32 +441,27 @@ const playerClick = (move) => {
     if (movesValidNext.length == 0) {
       switch (game.turn) {
         case "computer": game.statsComputer+=game.moves.length-1;break;
-        case "human": game.statsHuman+=game.moves.length-1;break;
       }
-
-      game.stats.push(game.moves.length-1)
       localStorage.setItem("stats", JSON.stringify(game.stats))
       console.log("Score: " + (game.stats.slice(-1)))
       initMaze()
     } else {
-      switch (game.turn) {
-        case "human":
-          game.turn = "computer"
-          setTimeout(function(){
-            playerClick(game.ai(game.pos,game.maze))
-          },800)
-          break
+      switch (game.vs) {
         case "computer":
           game.turn = "human"
           break
+        case "self":
+          break
         default:
+          throw ("game.vs invalid: " + game.vs)
       }
-
-
       view.drawGame(game)
     }
   }
 }
+
+
+
 
 const clickRestart = () => {
   view.scrollToGame()
@@ -430,12 +484,25 @@ const clickReset = () => {
   initMaze()
 }
 
-const setAI = (ai_name) => {
+const setVSAI = (ai_name) => {
   document.querySelector(".active").classList.remove("active")
   game.ai = ai[ai_name]
+  game.vs = "computer"
   document.getElementById(ai_name).classList.add("active")
 }
 
+const setVSSelf = () => {
+  document.querySelector(".active").classList.remove("active")
+  game.ai = null
+  game.vs = "self"
+  document.getElementById("self").classList.add("active")
+}
+const setVSOther = () => {
+  document.querySelector(".active").classList.remove("active")
+  game.ai = null
+  game.vs = "other"
+  document.getElementById("other").classList.add("active")
+}
 
 
 
@@ -449,6 +516,8 @@ const initMazeHTML = () => {
     boxDiv.onclick = (()=>playerClick(yx))
   }
 
+  game.ai = null
+  game.vs = "self"
   document.documentElement.style.setProperty("--color-nothing", colors.nothing)
   document.documentElement.style.setProperty("--color-text", colors.startPos)
   document.documentElement.style.setProperty("--color-border", colors.playerPos)

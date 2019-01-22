@@ -113,8 +113,10 @@ view.drawMaze = (maze, startPos, pos, movesDone, turn) => {
             return colors.humanPos
           case "computer":
             return colors.computerPos
+          case "other":
+            return colors.computerPos
           default:
-            return colors.playerPos
+            return "##ff00ff"
         }
       } else {
         return colors.playerPosDeath
