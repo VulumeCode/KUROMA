@@ -341,7 +341,7 @@ const initMazeRandom = () => {
 }
 
 const initMaze = () => {
-  $(window).scrollTop(0)
+  view.scrollToGame()
 
   const loadStats = localStorage.getItem('stats')
   if (loadStats){
@@ -410,7 +410,7 @@ const playerClick = (move) => {
 }
 
 const clickRestart = () => {
-  $(window).scrollTop(0)
+  view.scrollToGame()
 
   game.startPos = game.startPos
   game.pos = game.startPos
@@ -422,7 +422,7 @@ const clickRestart = () => {
 }
 
 const clickReset = () => {
-  $(window).scrollTop(0)
+  view.scrollToGame()
 
   game.statsComputer = 0
   game.statsHuman = 0

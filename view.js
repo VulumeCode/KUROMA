@@ -172,3 +172,8 @@ view.enterFullscreen = () => {
     elem.mozRequestFullScreen()
   }
 }
+
+view.scrollToGame = () => {
+  let elem = document.querySelector("#header")
+  elem.scrollIntoView();
+}
