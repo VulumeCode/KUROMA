@@ -34,22 +34,41 @@ view.boxClick = (yx) => {
     easing: 'easeOutQuad',
   })
 }
-view.boxMouseDown = (yx) => {
-  anime({
-    targets: "#box" + yx ,
-    scale: [1, 0.85],
-    duration: 100,
+view.aiThink = (pos,maze) => {
+  const movesValid = getMoves(pos, maze)
+  movesValid.shuffle()
+  return anime({
+    targets: movesValid.map((yx)=>"#box" + yx) ,
+    scale: [
+      {value:1, duration: 0},
+      {value:0.85, duration:0},
+      {value:1, duration: 400},
+    ],
+    backgroundColor: [
+        {value:colors.validMove, duration: 0},
+        {value:colors.computerPos, duration:0},
+        {value:colors.validMove, duration: 400},
+    ],
     easing: 'easeOutQuad',
+    delay: anime.stagger(100),
   })
 }
-view.boxMouseUp = (yx) => {
-  anime({
-    targets: "#box" + yx ,
-    scale: [0.85, 1],
-    duration: 100,
-    easing: 'easeOutQuad',
-  })
-}
+// view.boxMouseDown = (yx) => {
+//   anime({
+//     targets: "#box" + yx ,
+//     scale: [1, 0.85],
+//     duration: 100,
+//     easing: 'easeOutQuad',
+//   })
+// }
+// view.boxMouseUp = (yx) => {
+//   anime({
+//     targets: "#box" + yx ,
+//     scale: [0.85, 1],
+//     duration: 100,
+//     easing: 'easeOutQuad',
+//   })
+// }
 
 view.boxAppear = (yx) => {
   anime({

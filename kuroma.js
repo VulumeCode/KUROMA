@@ -399,9 +399,9 @@ const playerClick = (move) => {
       switch (game.vs) {
         case "computer":
           game.turn = "computer"
-          setTimeout(function(){
+          view.aiThink(game.pos,game.maze).finished.then(function(){
             aiClick(game.ai(game.pos,game.maze))
-          },800)
+          })
           break
         case "self":
           break
@@ -415,6 +415,18 @@ const playerClick = (move) => {
     }
   }
 }
+
+const playerClickCheck = (move) => {
+  view.boxClick(move)
+
+  const movesValid = getMoves(game.pos,game.maze)
+
+      const movesValidNext = getMoves(move,game.maze)
+      for (let moveValidNext of movesValidNext) {
+        view.boxClick(moveValidNext)
+      }
+}
+
 
 
 const aiClick = (move) => {
@@ -514,6 +526,7 @@ const initMazeHTML = () => {
     boxDiv.id = 'box' + yx
     boxDiv.className = 'box'
     boxDiv.onclick = (()=>playerClick(yx))
+    boxDiv.onmousedown = (()=>playerClickCheck(yx))
   }
 
   game.ai = null
