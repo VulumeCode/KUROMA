@@ -181,8 +181,66 @@ view.drawStats = (gameState) => {
   gamesElem.textContent = "Games\xa0\xa0\xa0::\xa0\xa0\xa0" + gameState.stats.length
 
   const rankElem = document.getElementById("rank")
-  const recentStats = gameState.stats.slice(-5)
-  rankElem.textContent = "Rank\xa0\xa0\xa0::\xa0\xa0\xa0#" + Math.floor(100 - (100 * ((recentStats.reduce((a, b) => a + b, 0) / (40 * recentStats.length)) || 0)))
+  // const recentStats = gameState.stats.slice(-5)
+  // rankElem.textContent = "Rank\xa0\xa0\xa0::\xa0\xa0\xa0#" + Math.floor(100 - (100 * ((recentStats.reduce((a, b) => a + b, 0) / (40 * recentStats.length)) || 0)))
+  rankElem.textContent = "Grade\xa0\xa0\xa0::\xa0\xa0\xa0" + getRank(game.stats)
+}
+
+const getRank = (stats) => {
+  const recentStats = stats.slice(-5)
+
+  const avg = ((recentStats.reduce((a, b) => a + b, 0) / (recentStats.length)) || 0)
+
+  // console.log("avg: ",avg)
+
+  if (recentStats.slice(-3).filter((x)=>x>=30).length===3){
+    return "SSS"
+  }
+  if (recentStats.slice(-2).filter((x)=>x>=30).length===2){
+    return "SS"
+  }
+  if (avg >= 25 || recentStats.slice(-1).filter((x)=>x>=30).length===1){
+    return "S"
+  }
+  if (avg >= 20 && recentStats.filter((x)=>x>=25).length>=1){
+    return "A+"
+  }
+  if (avg >= 20){
+    return "A"
+  }
+  if (avg >= 19){
+    return "A-"
+  }
+  if (avg >= 15 && recentStats.filter((x)=>x>=20).length>=1){
+    return "B+"
+  }
+  if (avg >= 15){
+    return "B"
+  }
+  if (avg >= 14){
+    return "B-"
+  }
+  if (avg >= 5 && recentStats.filter((x)=>x>=15).length>=1){
+    return "C+"
+  }
+  if (avg >= 5){
+    return "C"
+  }
+  if (avg >= 4){
+    return "C-"
+  }
+  if (avg >= 1 && recentStats.filter((x)=>x>=5).length>=1){
+    return "D+"
+  }
+  if (avg >= 1){
+    return "D"
+  }
+  if (avg >= 0){
+    return "D-"
+  }
+
+
+
 }
 
 view.enterFullscreen = () => {

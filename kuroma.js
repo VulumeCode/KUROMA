@@ -391,9 +391,13 @@ const playerClick = (move) => {
         default: game.statsComputer+=game.moves.length-1;break;
       }
 
-      game.stats.push(game.moves.length-1)
+      if (game.vs === "computer"){
+        game.stats.push(Math.max(20,game.moves.length-1))
+      } else {
+        game.stats.push((game.moves.length-1))
+      }
       localStorage.setItem("stats", JSON.stringify(game.stats))
-      console.log("Score: " + (game.stats.slice(-1)))
+      console.log("Win "+game.turn+": " + (game.moves.length-1))
       initMaze()
     } else {
       switch (game.vs) {
@@ -406,7 +410,7 @@ const playerClick = (move) => {
         case "self":
           break
         case "other":
-          game.turn = "other"
+          game.turn = game.turn === "other" ? "human" : "other"
           break
         default:
           throw ("game.vs invalid: " + game.vs)
@@ -454,8 +458,9 @@ const aiClick = (move) => {
       switch (game.turn) {
         case "computer": game.statsComputer+=game.moves.length-1;break;
       }
+      game.stats.push(Math.min(20,game.moves.length-1))
       localStorage.setItem("stats", JSON.stringify(game.stats))
-      console.log("Score: " + (game.stats.slice(-1)))
+      console.log("Win CPU: " + (game.moves.length-1))
       initMaze()
     } else {
       switch (game.vs) {
@@ -492,7 +497,7 @@ const clickReset = () => {
 
   game.statsComputer = 0
   game.statsHuman = 0
-  localStorage.setItem("stats", JSON.stringify([]))
+  localStorage.setItem("stats", JSON.stringify([20,20,20,20,20]))
   initMaze()
 }
 
