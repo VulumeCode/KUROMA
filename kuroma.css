@@ -4,10 +4,6 @@
   --color-nothing: none;
   --color-text: none;
   --color-border: none;
-  font-smooth: never;
-  -webkit-font-smooth: never;
-  -webkit-font-smoothing: none;
-
 }
 
 .unselectable {
@@ -77,14 +73,15 @@ h1 {
 h2 {
   position: relative;
   text-align: center;
-  /* height: 90%; */
+  height: 48px;
   margin: 0px auto 5px auto;
   color:  #676E95;
   font-size: 40px;
   font-weight: 700;
   font-family: 'Orbitron';
+  font-variant: small-caps;
 }
-h2:hover {
+h2.hoverable:hover {
   color: #C3E88D;
   text-shadow: 0 0 2px #C3E88D;
 }
@@ -99,13 +96,14 @@ h2.title {
 }
 .aiButton  {
   position: relative;
-  height: 5%;
+  height: 28px;
   margin: -5px auto 4px auto;
   color:  #676E95;
   font-size: 20px;
   font-weight: 500;
   font-family: 'Orbitron';
   text-align: center;
+  font-variant: small-caps;
 }
 
 .aiButton:hover {
