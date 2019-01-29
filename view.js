@@ -36,22 +36,32 @@ view.boxClick = (yx) => {
 }
 view.aiThink = (pos,maze) => {
   const movesValid = getMoves(pos, maze)
-  movesValid.shuffle()
   return anime({
     targets: movesValid.map((yx)=>"#box" + yx) ,
-    scale: [
-      {value:1, duration: 0},
-      {value:0.85, duration:0},
-      {value:1, duration: 400},
-    ],
     backgroundColor: [
         {value:colors.validMove, duration: 0},
-        {value:colors.computerPos, duration:0},
-        {value:colors.validMove, duration: 400},
+        {value:colors.computerPos, duration:100},
+        {value:colors.validMove, duration: 100},
     ],
-    easing: 'easeOutQuad',
-    delay: anime.stagger(100),
+    loop: Math.min(3,movesValid.length),
+    easing: 'linear',
+    delay: 200,
   })
+  // return anime({
+  //   targets: movesValid.map((yx)=>"#box" + yx) ,
+  //   scale: [
+  //     {value:1, duration: 0},
+  //     {value:0.85, duration:0},
+  //     {value:1, duration: 200},
+  //   ],
+  //   backgroundColor: [
+  //       {value:colors.validMove, duration: 0},
+  //       {value:colors.computerPos, duration:100},
+  //       {value:colors.validMove, duration: 100},
+  //   ],
+  //   easing: 'easeOutQuad',
+  //   delay: anime.stagger(180, {start: 200}),
+  // })
 }
 // view.boxMouseDown = (yx) => {
 //   anime({
@@ -126,7 +136,8 @@ view.drawMaze = (maze, startPos, pos, movesDone, turn) => {
     } else if (maze[yx]) {
       return colors.open
     } else if (pos == yx) {
-      if (movesValid.length > 0){
+      // if (movesValid.length > 0){
+      if (true){
         switch (turn) {
           case "human":
             return colors.humanPos
@@ -169,21 +180,24 @@ view.drawGame = (gameState) => {
 }
 
 view.drawStats = (gameState) => {
-  const scoreElem = document.getElementById("score")
-  scoreElem.textContent =
-    gameState.statsComputer + "\xa0\xa0<CPU\xa0\xa0" + Math.max(0,gameState.moves.length-1) + "\xa0\xa0YOU>\xa0\xa0" + gameState.statsHuman
-  // scoreElem.textContent = "Score\xa0\xa0\xa0" + (gameState.moves.length-1) + "p"
+  const scoreGameElem = document.getElementById("scoreGame")
+  const scoreCPUElem = document.getElementById("scoreCPU")
+  const scoreYOUElem = document.getElementById("scoreYOU")
+  scoreCPUElem.textContent = gameState.statsComputer
+  scoreGameElem.textContent = Math.max(0,gameState.moves.length-1)
+  scoreYOUElem.textContent = gameState.statsHuman
+
 
   const maxElem = document.getElementById("max")
-  maxElem.textContent = "Max\xa0\xa0\xa0::\xa0\xa0\xa0" + Math.max(0, ...gameState.stats)
+  maxElem.textContent = Math.max(0, ...gameState.stats)
 
   const gamesElem = document.getElementById("games")
-  gamesElem.textContent = "Games\xa0\xa0\xa0::\xa0\xa0\xa0" + gameState.stats.length
+  gamesElem.textContent = gameState.stats.length
 
   const rankElem = document.getElementById("rank")
   // const recentStats = gameState.stats.slice(-5)
   // rankElem.textContent = "Rank\xa0\xa0\xa0::\xa0\xa0\xa0#" + Math.floor(100 - (100 * ((recentStats.reduce((a, b) => a + b, 0) / (40 * recentStats.length)) || 0)))
-  rankElem.textContent = "Grade\xa0\xa0\xa0::\xa0\xa0\xa0" + getRank(game.stats)
+  rankElem.textContent = getRank(game.stats)
 }
 
 const getRank = (stats) => {

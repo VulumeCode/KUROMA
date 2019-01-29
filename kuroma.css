@@ -4,6 +4,10 @@
   --color-nothing: none;
   --color-text: none;
   --color-border: none;
+  font-smooth: never;
+  -webkit-font-smooth: never;
+  -webkit-font-smoothing: none;
+
 }
 
 .unselectable {
@@ -63,6 +67,10 @@ h1 {
   /* height: 80%; */
   margin: 16px auto 16px auto;
   color:  var(--color-text);
+  /* background: linear-gradient(330deg, #e05252 0%, #99e052 25%, #52e0e0 50%, #9952e0 75%, #e05252 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; */
+
   font-size: 500%;
   font-family: 'M PLUS 1p', sans-serif;
 }
@@ -70,36 +78,43 @@ h2 {
   position: relative;
   text-align: center;
   /* height: 90%; */
-  margin: -18px auto 0px auto;
-  color:  var(--color-text);
-  font-size: 300%;
-  font-weight: 600;
-  font-family: 'teko';
+  margin: 0px auto 5px auto;
+  color:  #676E95;
+  font-size: 40px;
+  font-weight: 700;
+  font-family: 'Orbitron';
 }
 h2:hover {
-  color: #F78C6C;
+  color: #C3E88D;
+  text-shadow: 0 0 2px #C3E88D;
 }
 
 h2.title {
-  margin: auto;
 
+  color:  var(--color-text);
+  margin: auto;
+  font-size: 48px;
+  font-weight: 900;
+  font-family: 'Orbitron';
 }
 .aiButton  {
   position: relative;
   height: 5%;
-  margin: -5px auto 9px auto;
-  color:  var(--color-text);
-  font-size: 150%;
-  font-weight: 600;
-  font-family: 'teko';
+  margin: -5px auto 4px auto;
+  color:  #676E95;
+  font-size: 20px;
+  font-weight: 500;
+  font-family: 'Orbitron';
   text-align: center;
 }
 
 .aiButton:hover {
-  color: #F78C6C;
+  color: #C3E88D;
+  text-shadow: 0 0 2px #C3E88D;
 }
 .aiButton.active {
-  color:  #C3E88D;
+  color:  #89DDFF;
+  text-shadow: 0 0 2px #89DDFF;
 }
 
 .stats {
@@ -108,20 +123,30 @@ h2.title {
   display: grid;
   grid-template-rows: repeat(3, 16);
   grid-gap: 16px;
-  border: solid   #C3E88D;
+  border: solid   #32374D;
   border-width: 16px;
   padding: 24px;
   margin: 10% auto;
-  color:  var(--color-text);
-  font-size: 200%;
-  font-weight: 600;
-  font-family: 'teko';
+  color:  #676E95;
+  font-size: 20px;
+  font-weight: 500;
+  font-family: 'Orbitron';
 }
 .stats div {
   margin: 0px  ;
+  /* white-space: pre; */
   text-align:center;
   height:40px;
 }
+.CPUstat {
+  color: #C3E88D;
+  text-shadow: 0 0 2px #C3E88D;
+}
+.YOUstat {
+  color: #89DDFF;
+  text-shadow: 0 0 2px #89DDFF;
+}
+
 
 
 .mobileHide {

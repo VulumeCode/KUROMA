@@ -6,7 +6,8 @@
 <meta name="viewport" content="width=device-width, user-scalable=no">
 <meta name="theme-color" content="#2c292d" />
 <link href="https://fonts.googleapis.com/css?family=M+PLUS+1p:900&amp;subset=japanese" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Teko:300,400,500,600,700" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Orbitron:400,500,700,900" rel="stylesheet">
+
 <link href="kuroma.css" rel="stylesheet">
 
 <link rel="icon" type="image/png" href="favicontr.png" sizes="32x32">
@@ -48,10 +49,29 @@
     <div class="panel">
       <h1 class="mobileHide">黒馬</h1>
       <div class="stats">
-        <div id="score"></div>
-        <div id="max"></div>
-        <div id="games"></div>
-        <div id="rank"></div>
+        <div>
+          <span style="float:left">>>></span>
+          <span style="float:center" id="scoreGame"></span>
+          <span style="float:right"><<<</span>
+        </div>
+        <div>
+          <span style="float:left" class="CPUstat">CPU_&nbsp;</span>
+          <span style="float:left" class="CPUstat" id="scoreCPU"></span>
+          <span style="float:right" class="YOUstat">&nbsp;_YOU</span>
+          <span style="float:right" class="YOUstat" id="scoreYOU"></span>
+        </div>
+        <div>
+          <span style="float:left">MAX_</span>
+          <span style="float:right" id="max"></span>
+        </div>
+        <div>
+          <span style="float:left">GAMES_</span>
+          <span style="float:right" id="games"></span>
+        </div>
+        <div>
+          <span style="float:left">GRADE_</span>
+          <span style="float:right" id="rank"></span>
+        </div>
       </div>
       <h2 class="title">KUROMA</h2>
     </div>
