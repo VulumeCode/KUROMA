@@ -7,6 +7,7 @@
 <meta name="theme-color" content="#2c292d" />
 <link href="https://fonts.googleapis.com/css?family=M+PLUS+1p:900&amp;subset=japanese" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Orbitron:400,500,700,900" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <link href="kuroma.css" rel="stylesheet">
 
@@ -28,18 +29,35 @@
 
     <div class="panel">
       <h1>黒馬</h1>
-      <h2 class="hoverable" onClick="initMaze();">NewGame_</h2>
-      <h2 style="text-decoration: underline;">ChooseVS</h2>
-      <div id="self" class="aiButton  active" onclick="setVSSelf()">1Player</div>
-      <div id="other" class="aiButton" onclick="setVSOther()">2Player</div>
-      <div id="zen" class="aiButton" onclick="setVSAI('zen')">AI:Zen</div>
-      <div id="leastmoves" class="aiButton" onclick="setVSAI('leastmoves')">AI:Samurai</div>
-      <div id="killormostmoves" class="aiButton" onclick="setVSAI('killormostmoves')">AI:Ronin</div>
-      <div id="killorsurvive" class="aiButton" onclick="setVSAI('killorsurvive')">AI:Ninja</div>
-      <h2 class="hoverable" onclick="view.enterFullscreen()">FullScreen_</h2>
-      <h2 class="hoverable" onClick="clickRestart();">Restart_</h2>
-      <h2 class="hoverable" onClick="clickReset();">ResetScore_</h2>
+      <h2 style="text-decoration: underline;" class="hoverable" onClick="initMaze();">New Game</h2>
+      <div class="gameModes">
+        <div>
+          <span style="float:left" class="aiButton">ZEN_</span>
+          <span style="float:right" class="aiButton">_VS</span>
+        </div>
+        <div>
+          <span style="float:left" id="self" class="aiButton  active" onclick="setVSSelf()">1Player</span>
+          <span style="float:right" id="other" class="aiButton" onclick="setVSOther()">2Player</span>
+        </div>
+        <div>
+          <span style="float:left" id="zen" class="aiButton" onclick="setVSAI('zen')">AI:Zen</span>
+          <span style="float:right" id="leastmoves" class="aiButton" onclick="setVSAI('leastmoves')">AI:Samurai</span>
+        </div>
+        <div>
+          <span style="float:left" id="killormostmoves" class="aiButton" onclick="setVSAI('killormostmoves')">AI:Ronin</span>
+          <span style="float:right" id="killorsurvive" class="aiButton" onclick="setVSAI('killorsurvive')">AI:Ninja</span>
+        </div>
+      </div>
+      <div class="gameOptions">
+        <div>
+          <h2 style="float:left" class="material-icons hoverable" onClick="clickRestart();">history</h2>
+          <h2 class="material-icons hoverable" onclick="view.enterFullscreen()">fullscreen</h2>
+          <h2 style="float:right" class="material-icons hoverable" onClick="clickReset();">settings_backup_restore</h2>
+        </div>
+      </div>
     </div>
+
+
     <div class="panel">
       <h1 id="header" onClick="initMaze();">黒馬</h1>
       <div class="wrapper" id="maze">
@@ -49,27 +67,27 @@
     <div class="panel">
       <h1 class="mobileHide">黒馬</h1>
       <div class="stats">
-        <div>
+        <div  id="scoreGameBanner">
           <span style="float:left">>>></span>
           <span style="float:center" id="scoreGame"></span>
           <span style="float:right"><<<</span>
         </div>
         <div>
-          <span style="float:left" class="CPUstat">CPU_&nbsp;</span>
-          <span style="float:left" class="CPUstat" id="scoreCPU"></span>
-          <span style="float:right" class="YOUstat">&nbsp;_YOU</span>
-          <span style="float:right" class="YOUstat" id="scoreYOU"></span>
+          <span style="float:left" class="YOUstat">YOU_&nbsp;</span>
+          <span style="float:left" class="YOUstat" id="scoreYOU"></span>
+          <span style="float:right" class="CPUstat">&nbsp;_CPU</span>
+          <span style="float:right" class="CPUstat" id="scoreCPU"></span>
         </div>
         <div>
-          <span style="float:left">MAX_</span>
+          <span style="float:left">Max_</span>
           <span style="float:right" id="max"></span>
         </div>
         <div>
-          <span style="float:left">GAMES_</span>
+          <span style="float:left">Games_</span>
           <span style="float:right" id="games"></span>
         </div>
         <div>
-          <span style="float:left">GRADE_</span>
+          <span style="float:left">Grade_</span>
           <span style="float:right" id="rank"></span>
         </div>
       </div>

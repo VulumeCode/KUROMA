@@ -494,7 +494,6 @@ const clickRestart = () => {
 
 const clickReset = () => {
   view.scrollToGame()
-
   game.statsComputer = 0
   game.statsHuman = 0
   localStorage.setItem("stats", JSON.stringify([20,20,20,20,20]))
@@ -506,6 +505,11 @@ const setVSAI = (ai_name) => {
   game.ai = ai[ai_name]
   game.vs = "computer"
   document.getElementById(ai_name).classList.add("active")
+  view.scrollToGame()
+  game.statsComputer = 0
+  game.statsHuman = 0
+  // localStorage.setItem("stats", JSON.stringify([20,20,20,20,20]))
+  initMaze()
 }
 
 const setVSSelf = () => {
@@ -513,12 +517,22 @@ const setVSSelf = () => {
   game.ai = null
   game.vs = "self"
   document.getElementById("self").classList.add("active")
+  view.scrollToGame()
+  game.statsComputer = 0
+  game.statsHuman = 0
+  // localStorage.setItem("stats", JSON.stringify([20,20,20,20,20]))
+  initMaze()
 }
 const setVSOther = () => {
   document.querySelector(".active").classList.remove("active")
   game.ai = null
   game.vs = "other"
   document.getElementById("other").classList.add("active")
+  view.scrollToGame()
+  game.statsComputer = 0
+  game.statsHuman = 0
+  // localStorage.setItem("stats", JSON.stringify([20,20,20,20,20]))
+  initMaze()
 }
 
 

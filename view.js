@@ -136,20 +136,15 @@ view.drawMaze = (maze, startPos, pos, movesDone, turn) => {
     } else if (maze[yx]) {
       return colors.open
     } else if (pos == yx) {
-      // if (movesValid.length > 0){
-      if (true){
-        switch (turn) {
-          case "human":
-            return colors.humanPos
-          case "computer":
-            return colors.computerPos
-          case "other":
-            return colors.computerPos
-          default:
-            return "##ff00ff"
-        }
-      } else {
-        return colors.playerPosDeath
+      switch (turn) {
+        case "human":
+          return colors.humanPos
+        case "computer":
+          return colors.computerPos
+        case "other":
+          return colors.computerPos
+        default:
+          return "##ff00ff"
       }
     } else if (startPos == yx) {
       return colors.startPos
@@ -180,6 +175,20 @@ view.drawGame = (gameState) => {
 }
 
 view.drawStats = (gameState) => {
+  const scoreGameBannerElem = document.getElementById("scoreGameBanner")
+  switch (gameState.turn) {
+    case "human":
+      scoreGameBannerElem.style.color = colors.humanPos; break;
+    case "computer":
+      scoreGameBannerElem.style.color = colors.computerPos; break;
+    case "other":
+      scoreGameBannerElem.style.color = colors.computerPos; break;
+    default:
+      scoreGameBannerElem.style.color = "##ff00ff"; break;
+  }
+
+
+
   const scoreGameElem = document.getElementById("scoreGame")
   const scoreCPUElem = document.getElementById("scoreCPU")
   const scoreYOUElem = document.getElementById("scoreYOU")
