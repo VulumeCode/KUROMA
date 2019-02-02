@@ -276,6 +276,6 @@ view.enterFullscreen = () => {
 }
 
 view.scrollToGame = () => {
-  let elem = document.querySelector("#header")
+  let elem = document.querySelector("#game")
   elem.scrollIntoView();
 }

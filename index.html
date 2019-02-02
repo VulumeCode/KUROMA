@@ -25,47 +25,46 @@
 
 </head>
 <body class="unselectable"  onload="initMazeHTML();">
-  <div class="panels">
+    <div class="header headerA" onClick="initMaze();">黒馬</div>
+    <div class="header headerB" onClick="initMaze();">黒馬</div>
+    <div class="header headerC" onClick="initMaze();">黒馬</div>
+    <div class="title titleA">KUROMA</div>
+    <div class="title titleB">KUROMA</div>
 
-    <div class="panel">
-      <h1>黒馬</h1>
-      <h2 style="text-decoration: underline;" class="hoverable" onClick="initMaze();">New Game</h2>
-      <div class="gameModes">
-        <div>
-          <span style="float:left" class="aiButton">ZEN_</span>
-          <span style="float:right" class="aiButton">_VS</span>
+    <div class="panelMainMenu">
+        <div class="newGame" onClick="initMaze();">New Game</div>
+        <div class="gameModes">
+          <div>
+            <span style="float:left" class="aiCategory">ZEN_</span>
+            <span style="float:right" class="aiCategory">_VS</span>
+          </div>
+          <div>
+            <span style="float:left" id="self" class="aiButton  active" onclick="setVSSelf()">1Player</span>
+            <span style="float:right" id="other" class="aiButton" onclick="setVSOther()">2Player</span>
+          </div>
+          <div>
+            <span style="float:left" id="zen" class="aiButton" onclick="setVSAI('zen')">AI:Zen</span>
+            <span style="float:right" id="leastmoves" class="aiButton" onclick="setVSAI('leastmoves')">AI:Samurai</span>
+          </div>
+          <div>
+            <span style="float:left" id="killormostmoves" class="aiButton" onclick="setVSAI('killormostmoves')">AI:Ronin</span>
+            <span style="float:right" id="killorsurvive" class="aiButton" onclick="setVSAI('killorsurvive')">AI:Ninja</span>
+          </div>
         </div>
-        <div>
-          <span style="float:left" id="self" class="aiButton  active" onclick="setVSSelf()">1Player</span>
-          <span style="float:right" id="other" class="aiButton" onclick="setVSOther()">2Player</span>
-        </div>
-        <div>
-          <span style="float:left" id="zen" class="aiButton" onclick="setVSAI('zen')">AI:Zen</span>
-          <span style="float:right" id="leastmoves" class="aiButton" onclick="setVSAI('leastmoves')">AI:Samurai</span>
-        </div>
-        <div>
-          <span style="float:left" id="killormostmoves" class="aiButton" onclick="setVSAI('killormostmoves')">AI:Ronin</span>
-          <span style="float:right" id="killorsurvive" class="aiButton" onclick="setVSAI('killorsurvive')">AI:Ninja</span>
+        <div class="gameOptions">
+          <div>
+            <div style="float:left" class="hoverable menuButton material-icons  " onClick="clickRestart();">history</div>
+            <div class="hoverable menuButton material-icons  " onclick="view.enterFullscreen()">fullscreen</div>
+            <div style="float:right" class="hoverable menuButton material-icons  " onClick="clickReset();">settings_backup_restore</div>
+          </div>
         </div>
       </div>
-      <div class="gameOptions">
-        <div>
-          <h2 style="float:left" class="material-icons hoverable" onClick="clickRestart();">history</h2>
-          <h2 class="material-icons hoverable" onclick="view.enterFullscreen()">fullscreen</h2>
-          <h2 style="float:right" class="material-icons hoverable" onClick="clickReset();">settings_backup_restore</h2>
-        </div>
-      </div>
-    </div>
-
-
-    <div class="panel">
-      <h1 id="header" onClick="initMaze();">黒馬</h1>
+    <div class="panelGame" id="game">
       <div class="wrapper" id="maze">
         <!-- <div class="box" id="xx" onClick="playerClick(xx);"></div> -->
       </div>
     </div>
-    <div class="panel">
-      <h1 class="mobileHide">黒馬</h1>
+    <div class="panelStats">
       <div class="stats">
         <div  id="scoreGameBanner">
           <span style="float:left">>>></span>
@@ -91,9 +90,6 @@
           <span style="float:right" id="rank"></span>
         </div>
       </div>
-      <h2 class="title">KUROMA</h2>
     </div>
-  </div>
-
 </body>
 </html>
