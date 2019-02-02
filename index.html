@@ -25,9 +25,9 @@
 
 </head>
 <body class="unselectable"  onload="initMazeHTML();">
-    <div class="header headerA" onClick="initMaze();">黒馬</div>
-    <div class="header headerB" onClick="initMaze();">黒馬</div>
-    <div class="header headerC" onClick="initMaze();">黒馬</div>
+    <div class="header headerA">黒馬</div>
+    <div class="header headerB" id="game">黒馬</div>
+    <div class="header headerC">黒馬</div>
     <div class="title titleA">KUROMA</div>
     <div class="title titleB">KUROMA</div>
 
@@ -39,8 +39,8 @@
             <span style="float:right" class="aiCategory">_VS</span>
           </div>
           <div>
-            <span style="float:left" id="self" class="aiButton  active" onclick="setVSSelf()">1Player</span>
-            <span style="float:right" id="other" class="aiButton" onclick="setVSOther()">2Player</span>
+            <span style="float:left" id="self" class="aiButton  active" onclick="setVSSelf()">1 Player</span>
+            <span style="float:right" id="other" class="aiButton" onclick="setVSOther()">2 Player</span>
           </div>
           <div>
             <span style="float:left" id="zen" class="aiButton" onclick="setVSAI('zen')">AI:Zen</span>
@@ -59,7 +59,7 @@
           </div>
         </div>
       </div>
-    <div class="panelGame" id="game">
+    <div class="panelGame">
       <div class="wrapper" id="maze">
         <!-- <div class="box" id="xx" onClick="playerClick(xx);"></div> -->
       </div>

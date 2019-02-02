@@ -43,6 +43,8 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+
 }
 
 body {
@@ -61,8 +63,8 @@ body {
     "stats"
     "headerC"
     "titleB";
-
   align-items: center;
+  scroll-snap-type: y;
 }
 
 @media (min-width: 768px) {
@@ -109,18 +111,18 @@ body {
 
 
 .header {
-  margin: auto;
-  position: relative;
-  text-align: center;
-  /* height: 80%; */
-  /* margin: 16px auto 16px auto; */
-  color:  var(--color-text);
-  /* background: linear-gradient(330deg, #e05252 0%, #99e052 25%, #52e0e0 50%, #9952e0 75%, #e05252 100%);
+scroll-snap-align: start;
+margin: auto;
+position: relative;
+text-align: center;
+/* height: 80%; */
+/* margin: 16px auto 16px auto; */
+color:  var(--color-text);
+/* background: linear-gradient(330deg, #e05252 0%, #99e052 25%, #52e0e0 50%, #9952e0 75%, #e05252 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent; */
-
-  font-size: 500%;
-  font-family: 'M PLUS 1p', sans-serif;
+font-size: 500%;
+font-family: 'M PLUS 1p', sans-serif;
 }
 
 
