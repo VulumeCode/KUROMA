@@ -91,18 +91,15 @@ body {
 
 .panelMainMenu  {
   display: grid;
-
   border: solid   #32374D;
   border-width: 16px;
   padding: 24px;
-  margin: 10% 10%;
-
-
+  margin: auto 10%;
   grid-template-rows: auto auto auto;
   grid-template-areas:
     "newGame"
     "gameModes"
-    "gameOptions"
+    "gameOptions";
 }
 
 .newGame { grid-area: newGame; }
@@ -250,7 +247,7 @@ body {
   border: solid   #32374D;
   border-width: 16px;
   padding: 24px;
-  margin: 10% 10%;
+  margin: auto 10%;
   color:  #676E95;
   font-size: 20px;
   font-weight: 500;

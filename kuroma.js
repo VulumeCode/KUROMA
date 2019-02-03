@@ -352,12 +352,10 @@ const initMaze = () => {
     game.stats = []
   }
 
-  view.drawGame(game).finished.then(()=>{
-    view.mazeDisappear(game.moves).finished.then(()=>{
-      initMazeRandom()
-      view.drawGame(game).finished.then(()=>{
-        view.mazeAppear()
-      })
+  initMazeRandom()
+  view.mazeBlank().finished.then(()=>{
+    view.drawGame(game).finished.then(()=>{
+      view.mazeAppear()
     })
   })
 }
@@ -398,7 +396,12 @@ const playerClick = (move) => {
       }
       localStorage.setItem("stats", JSON.stringify(game.stats))
       console.log("Win "+game.turn+": " + (game.moves.length-1))
-      initMaze()
+
+      view.drawGame(game).finished.then(()=>{
+        view.mazeDisappear(game.moves).finished.then(()=>{
+          initMaze()
+        })
+      })
     } else {
       switch (game.vs) {
         case "computer":
@@ -461,7 +464,12 @@ const aiClick = (move) => {
       game.stats.push(Math.min(20,game.moves.length-1))
       localStorage.setItem("stats", JSON.stringify(game.stats))
       console.log("Win CPU: " + (game.moves.length-1))
-      initMaze()
+
+      view.drawGame(game).finished.then(()=>{
+        view.mazeDisappear(game.moves).finished.then(()=>{
+          initMaze()
+        })
+      })
     } else {
       switch (game.vs) {
         case "computer":

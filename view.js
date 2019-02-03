@@ -43,7 +43,7 @@ view.aiThink = (pos,maze) => {
         {value:colors.computerPos, duration:100},
         {value:colors.validMove, duration: 100},
     ],
-    loop: Math.min(3,movesValid.length),
+    loop: Math.min(2,movesValid.length),
     easing: 'linear',
     delay: 200,
   })
@@ -121,6 +121,13 @@ view.mazeDisappear = (movesDone) => {
         return 500+ (movesDone.length+1)*100 + offset * 60
       }
     },
+  })
+}
+view.mazeBlank = () => {
+  return anime({
+    targets: ".box",
+    opacity: 0,
+    duration: 0,
   })
 }
 
