@@ -44,21 +44,23 @@
           </div>
           <div>
             <span style="float:left" id="zenmaster" class="aiButton" onclick="setVSAI('zenmaster')">AI:Master</span>
-            <span style="float:right" id="killormostmoves" class="aiButton" onclick="setVSAI('killormostmoves')">AI:Ronin</span>
+            <span style="float:right" id="killormostmoves" class="aiButton" onclick="setVSAI('killormostmoves')">Ronin:AI</span>
           </div>
           <div>
             <span style="float:left" id="zen" class="aiButton" onclick="setVSAI('zen')">AI:Monk</span>
-            <span style="float:right" id="leastmoves" class="aiButton" onclick="setVSAI('leastmoves')">AI:Samurai</span>
+            <span style="float:right" id="leastmoves" class="aiButton" onclick="setVSAI('leastmoves')">Samurai:AI</span>
           </div>
           <div>
             <span style="float:left" id="drunk" class="aiButton" onclick="setVSAI('drunk')">AI:Drunk</span>
-            <span style="float:right" id="killorsurvive" class="aiButton" onclick="setVSAI('killorsurvive')">AI:Ninja</span>
+            <span style="float:right" id="killorsurvive" class="aiButton" onclick="setVSAI('killorsurvive')">Ninja:AI</span>
           </div>
         </div>
         <div class="gameOptions">
           <div>
+            <div style="float:left" class="hoverable menuButton material-icons  " onClick="clickRestart();">settings</div>
             <div style="float:left" class="hoverable menuButton material-icons  " onClick="clickRestart();">history</div>
             <div class="hoverable menuButton material-icons  " onclick="view.enterFullscreen()">fullscreen</div>
+            <div style="float:right" class="hoverable menuButton material-icons  " onClick="clickReset();">help_outline</div>
             <div style="float:right" class="hoverable menuButton material-icons  " onClick="clickReset();">settings_backup_restore</div>
           </div>
         </div>

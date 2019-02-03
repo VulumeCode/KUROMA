@@ -138,6 +138,9 @@ body {
   font-family: 'Orbitron';
   border-bottom: solid #676E95;
 }
+.menuButton {
+  font-weight: 100;
+}
 .newGame.hoverable:hover ,
 .menuButton.hoverable:hover {
   color: #C3E88D;
@@ -216,7 +219,7 @@ body {
 
 .wrapper {
   width: 356px;
-  margin: auto;
+  margin: 32px auto;
 
   position: relative;
   display: grid;
