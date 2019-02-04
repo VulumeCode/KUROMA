@@ -152,7 +152,7 @@ const reachableNdepth_zen = (maze, yx, n) => {
 
 
 ai.zenmaster = (pos,maze) => {
-  const depth = Math.randomIntBetween(8,10)
+  const depth = 10
   let bestMove = null // higher is better, not competetive
   let bestMoveScore = -666
   const movesValid = getMoves(pos,maze)
@@ -167,11 +167,6 @@ ai.zenmaster = (pos,maze) => {
       bestMoveScore = moveScore
     }
   }
-  // if (bestMoveScore > depth){
-  //   console.debug("🐴 explore: pos"+bestMove+", score:"+bestMoveScore)
-  // }else{
-  //   console.debug("🐴 the end is neigh: pos"+bestMove+", score:"+bestMoveScore+" left...")
-  // }
   return bestMove
 }
 
@@ -185,7 +180,7 @@ const esti = (maze, yx, n) => {
     // console.log(">".repeat(1+n) + 0)
     return 0
   }
-  if (n==0) {
+  if (n<=0) {
     // console.log(">".repeat(1+n) + (reachable.length))
     return 1
   }
@@ -204,10 +199,10 @@ const maxi = (maze, yx, n) => {
     // console.log(">".repeat(1+n) + 0)
     return 0
   }
-  if (n==0) {
-    // console.log(">".repeat(1+n) + (reachable.length))
-    return 1
-  }
+  // if (n==0) {
+  //   // console.log(">".repeat(1+n) + (reachable.length))
+  //   return 1
+  // }
   let bestMoveScore = -666
   for (let move of reachable) {
     const newMaze = makeMove(move, maze)

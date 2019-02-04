@@ -352,8 +352,8 @@ const initMaze = () => {
     game.stats = []
   }
 
-  initMazeRandom()
   view.mazeBlank().finished.then(()=>{
+    initMazeRandom()
     view.drawGame(game).finished.then(()=>{
       view.mazeAppear()
     })
