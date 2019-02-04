@@ -297,7 +297,8 @@ const game = {
   stats : [],
   statsComputer : 0,
   statsHuman : 0,
-  ai : ai.none,
+  ai : null,
+  showHelp: false,
 }
 
 const initMazeStatic = () => {
@@ -504,9 +505,26 @@ const clickReset = () => {
   view.scrollToGame()
   game.statsComputer = 0
   game.statsHuman = 0
-  localStorage.setItem("stats", JSON.stringify([20,20,20,20,20]))
+  localStorage.setItem("stats", JSON.stringify([]))
   initMaze()
 }
+
+const clickHelp = () => {
+  if (game.showHelp){
+    game.showHelp = false;
+    document.getElementById("help").style.display = "none"
+    document.getElementById("maze").style.display = ""
+  } else {
+    view.scrollToGame()
+    game.showHelp = true;
+    document.getElementById("help").style.display = ""
+    document.getElementById("maze").style.display = "none"
+  }
+}
+
+
+
+
 
 const setVSAI = (ai_name) => {
   document.querySelector(".active").classList.remove("active")
@@ -564,29 +582,3 @@ const initMazeHTML = () => {
 
   initMaze()
 }
-
-
-
-// const boxMouseDown = (yx) => {
-//   view.boxMouseDown(yx)
-// }
-// const boxMouseUp = (yx) => {
-//   view.boxMouseUp(yx)
-// }
-
-// // infinite scroll TODO throttle
-// $(document).ready(function() {
-//     var bgHeight = $(document).height() // pixel height of background image
-//     $('body').height( bgHeight + $(window).height() )
-//     $(window).scroll(function() {
-//         if ( $(window).scrollTop() >= ($('body').height() - $(window).height()) ) {
-//             $(window).scrollTop(10)
-//         }
-//         else if ( $(window).scrollTop() == 0 ) {
-//             $(window).scrollTop($('body').height() - $(window).height() -10)
-//         }
-//     })
-// })
-// $(window).resize(function() {
-//     $('body').height( bgHeight + $(window).height() )
-// })

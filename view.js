@@ -217,7 +217,7 @@ view.drawStats = (gameState) => {
 }
 
 const getRank = (stats) => {
-  const recentStats = stats.slice(-5)
+  const recentStats = [20,20,20,20,20,...stats].slice(-5)
 
   const avg = ((recentStats.reduce((a, b) => a + b, 0) / (recentStats.length)) || 0)
 
@@ -274,11 +274,29 @@ const getRank = (stats) => {
 }
 
 view.enterFullscreen = () => {
-  let elem = document.querySelector(":root")
-  if (elem.webkitRequestFullScreen) {
-    elem.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT)
+  // let elem = document.querySelector(":root")
+  // if (elem.webkitRequestFullScreen) {
+  //   elem.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT)
+  // } else {
+  //   elem.mozRequestFullScreen()
+  // }
+  if ((document.fullScreenElement && document.fullScreenElement !== null) ||
+   (!document.mozFullScreen && !document.webkitIsFullScreen)) {
+    if (document.documentElement.requestFullScreen) {
+      document.documentElement.requestFullScreen();
+    } else if (document.documentElement.mozRequestFullScreen) {
+      document.documentElement.mozRequestFullScreen();
+    } else if (document.documentElement.webkitRequestFullScreen) {
+      document.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+    }
   } else {
-    elem.mozRequestFullScreen()
+    if (document.cancelFullScreen) {
+      document.cancelFullScreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.webkitCancelFullScreen) {
+      document.webkitCancelFullScreen();
+    }
   }
 }
 

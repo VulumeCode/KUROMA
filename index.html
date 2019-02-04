@@ -57,20 +57,50 @@
         </div>
         <div class="gameOptions">
           <div>
-            <div style="float:left" class="hoverable menuButton material-icons  " onClick="clickRestart();">settings</div>
-            <div style="float:left" class="hoverable menuButton material-icons  " onClick="clickRestart();">history</div>
-            <div class="hoverable menuButton material-icons  " onclick="view.enterFullscreen()">fullscreen</div>
-            <div style="float:right" class="hoverable menuButton material-icons  " onClick="clickReset();">help_outline</div>
-            <div style="float:right" class="hoverable menuButton material-icons  " onClick="clickReset();">settings_backup_restore</div>
+            <div style="float:left" class="hoverable menuButton material-icons" onClick="clickHelp()">help_outline</div>
+            <div class="hoverable menuButton material-icons" onclick="view.enterFullscreen()">fullscreen</div>
+            <div style="float:right" class="hoverable menuButton material-icons" onClick="clickReset()">settings_backup_restore</div>
           </div>
         </div>
       </div>
     <div class="panelGame">
       <div class="wrapper" id="maze">
-        <!-- <div class="box" id="xx" onClick="playerClick(xx);"></div> -->
+        <!-- <div class="box" id="xx" onClick="playerClick(xx)"></div> -->
+      </div>
+      <div class="help" id="help"   style="display: none" onClick="clickHelp()">
+        <p>KUROMA_ Jump across the board like a horse in chess. Don't jump on the same square twice.</p>
+        <p>ZEN_ Try to make as many jumps as possible. Play along with an AI to guide or challenge you.</p>
+        <p>VS_ Force your opponent in a position they can't jump away from.
+          Play against another human or an AI. Each AI has their own strategy, not ranked by difficulty.</p>
+        <p>Click <span class="material-icons">settings_backup_restore</span> to reset all scores.</p>
+        <p>Click <span class="material-icons">fullscreen</span> to go fullscreen.</p>
       </div>
     </div>
     <div class="panelStats">
+      <!-- <div class="stats" style="display: none">
+        <div  id="scoreGameBanner">
+          <span style="float:left">>>></span>
+          <span style="float:center" id="scoreGame"></span>
+          <span style="float:right"><<<</span>
+        </div>
+        <div>
+          <span style="float:left" class="YOUstat">Score_</span>
+          <span style="float:right" class="YOUstat" id="scoreZEN"></span>
+        </div>
+        <div>
+          <span style="float:left">Max_</span>
+          <span style="float:right" id="max"></span>
+        </div>
+        <div>
+          <span style="float:left">Games_</span>
+          <span style="float:right" id="games"></span>
+        </div>
+        <div>
+          <span style="float:left">Grade_</span>
+          <span style="float:right" id="rank"></span>
+        </div>
+      </div> -->
+
       <div class="stats">
         <div  id="scoreGameBanner">
           <span style="float:left">>>></span>
