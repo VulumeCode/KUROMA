@@ -188,17 +188,17 @@ view.drawStats = (gameState) => {
       const scoreYOUElem = document.getElementById("scoreYOUcomputer")
       scoreYOUElem.textContent = gameState.stats[gameState.vs].youscore
       const winsYOUElem = document.getElementById("winsYOUcomputer")
-      winsYOUElem.textContent = gameState.stats[gameState.vs].scores.filter(x=>x.win="self").length
+      winsYOUElem.textContent = gameState.stats[gameState.vs].scores.filter(x=>x.win==="self").length
       const maxYOUElem = document.getElementById("maxYOUcomputer")
       maxYOUElem.textContent = Math.max(0, ...gameState.stats[gameState.vs].scores
-                                                    .filter(x=>x.win="self").map(x=>x.score))
+                                                    .filter(x=>x.win==="self").map(x=>x.score))
       const scoreCPUElem = document.getElementById("scoreCPUcomputer")
       scoreCPUElem.textContent = gameState.stats[gameState.vs].otherscore
       const winsCPUElem = document.getElementById("winsCPUcomputer")
-      winsCPUElem.textContent = gameState.stats[gameState.vs].scores.filter(x=>x.win="computer").length
+      winsCPUElem.textContent = gameState.stats[gameState.vs].scores.filter(x=>x.win==="computer").length
       const maxCPUElem = document.getElementById("maxCPUcomputer")
       maxCPUElem.textContent = Math.max(0, ...gameState.stats[gameState.vs].scores
-                                                    .filter(x=>x.win="computer").map(x=>x.score))
+                                                    .filter(x=>x.win==="computer").map(x=>x.score))
       const gradeVSElem = document.getElementById("gradeVS")
       gradeVSElem.textContent = getGradeVS(gameState.stats[gameState.vs].scores)
       break;
@@ -207,20 +207,20 @@ view.drawStats = (gameState) => {
       const scoreYOUElem = document.getElementById("scoreYOUother")
       scoreYOUElem.textContent = gameState.stats[gameState.vs].youscore
       const winsYOUElem = document.getElementById("winsYOUother")
-      winsYOUElem.textContent = gameState.stats[gameState.vs].scores.filter(x=>x.win="self").length
+      winsYOUElem.textContent = gameState.stats[gameState.vs].scores.filter(x=>x.win==="self").length
       const maxYOUElem = document.getElementById("maxYOUother")
       maxYOUElem.textContent = Math.max(0, ...gameState.stats[gameState.vs].scores
-                                                    .filter(x=>x.win="self").map(x=>x.score))
+                                                    .filter(x=>x.win==="self").map(x=>x.score))
       const scoreOTHERElem = document.getElementById("scoreOTHERother")
       scoreOTHERElem.textContent = gameState.stats[gameState.vs].otherscore
       const winsOTHERElem = document.getElementById("winsOTHERother")
-      winsOTHERElem.textContent = gameState.stats[gameState.vs].scores.filter(x=>x.win="other").length
+      winsOTHERElem.textContent = gameState.stats[gameState.vs].scores.filter(x=>x.win==="other").length
       const maxOTHERElem = document.getElementById("maxOTHERother")
       maxOTHERElem.textContent = Math.max(0, ...gameState.stats[gameState.vs].scores
-                                                    .filter(x=>x.win="other").map(x=>x.score))
+                                                    .filter(x=>x.win==="other").map(x=>x.score))
       const totalotherElem = document.getElementById("totalother")
       totalotherElem.textContent = gameState.stats[gameState.vs].scores
-                                                    .reduce((a, b) => a.score + b.score, 0)
+                                                    .map(x=>x.score).reduce((a, b) => a + b, 0)
       break;
     }
   }

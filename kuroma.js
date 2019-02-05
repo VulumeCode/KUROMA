@@ -189,33 +189,7 @@ const makeMove = (move, maze) => {
   return newMaze
 }
 
-const mazeToStr = (maze,startPos,pos,moves) => {
-  let mazeStr = ""
-  for (let y = 0; y < 10; y++) {
-    for (let x = 0; x < 10; x++) {
-      const yx = yxmerge(y,x)
-      if (maze[yx]) {
-        mazeStr += "■ "
-      } else if (pos == yx) {
-        mazeStr += "@ "
-      } else if (startPos == yx) {
-        mazeStr += "O "
-      } else if (!!moves && moves.includes(yx)) {
-        mazeStr += "x "
-      } else {
-        mazeStr += "  "
-      }
-    }
-    mazeStr += "\n"
-  }
-  return mazeStr
-}
-
-
-
-
-// CONTROLLERS
-
+// STATE
 
 const game = {
   pos : 0,
@@ -292,35 +266,6 @@ const gameModeStat = (vs) => {
   }
 }
 
-
-
-
-const initMazeStatic = () => {
-  game.startPos = startPos
-  game.pos = startPos
-  game.moves = [startPos]
-  game.maze = startMaze.clone()
-  game.maze[startPos] = false
-  game.startMaze = game.maze
-  game.turn = "human"
-}
-
-const initMazeRandomStartPos = () => {
-  game.maze = startMaze.clone()
-  while (true) {
-    const tryStartPos = Math.randomInt(100)
-    if (game.maze[tryStartPos]) {
-      game.startPos = tryStartPos
-      game.pos = tryStartPos
-      game.moves = [tryStartPos]
-      game.maze[tryStartPos] = false
-      game.startMaze = game.maze
-      game.turn = "human"
-      break
-    }
-  }
-}
-
 const initMazeRandom = () => {
   game.maze = genMaze()
   while (true) {
@@ -331,7 +276,6 @@ const initMazeRandom = () => {
       game.moves = [tryStartPos]
       game.maze[tryStartPos] = false
       game.startMaze = game.maze.clone()
-      game.turn = "human"
       break
     }
   }
@@ -340,11 +284,10 @@ const initMazeRandom = () => {
 const initMaze = () => {
   view.scrollToGame()
 
-  // TODO
-  // const loadStats = localStorage.getItem('stats')
-  // if (loadStats){
-  //   game.stats = JSON.parse(loadStats)
-  // }
+  const loadStats = localStorage.getItem('stats')
+  if (loadStats){
+    game.stats = JSON.parse(loadStats)
+  }
 
   view.mazeBlank().finished.then(()=>{
     initMazeRandom()
@@ -377,21 +320,39 @@ const playerClick = (move) => {
     }
     // GAME OVER
     if (movesValidNext.length == 0) {
-      switch (game.turn) {
-        case "human": game.statsHuman+=game.moves.length-1;break;
-        default: game.statsComputer+=game.moves.length-1;break;
+
+      const winScore = (game.moves.length-1)
+      switch (gameMode(game.vs)) {
+        case "zen":
+          game.stats[game.vs].score += winScore
+          game.stats[game.vs].scores.push(winScore)
+          break;
+        case "vs":
+          switch (game.turn) {
+            case "human":
+              game.stats[game.vs].youscore += winScore
+              game.stats[game.vs].scores.push({win:"self", score:winScore})
+              break;
+            case "other":
+              game.stats[game.vs].otherscore += winScore
+              game.stats[game.vs].scores.push({win:"other", score:winScore})
+              break;
+          }
+          break;
       }
 
-      if (game.vs === "computer"){
-        game.stats.push()
-      } else {
-        game.stats.push((game.moves.length-1))
-      }
+
+
       localStorage.setItem("stats", JSON.stringify(game.stats))
-      console.log("Win "+game.turn+": " + (game.moves.length-1))
+      console.log("Win "+game.turn+": " + winScore)
 
       view.drawGame(game).finished.then(()=>{
         view.mazeDisappear(game.moves).finished.then(()=>{
+          if (game.vs === "vsother"){
+            game.turn = game.turn === "other" ? "human" : "other"
+          } else {
+            game.turn = "human"
+          }
           initMaze()
         })
       })
@@ -409,7 +370,7 @@ const playerClick = (move) => {
           game.turn = game.turn === "other" ? "human" : "other"
           break
         default:
-          throw ("game.vs invalid: " + game.vs)
+          throw ("gameVSMode invalid: " + gameVSMode(game.vs) + " from "+ game.vs)
       }
       view.drawGame(game)
     }
@@ -448,27 +409,34 @@ const aiClick = (move) => {
     }
     // GAME OVER
     if (movesValidNext.length == 0) {
-      switch (game.turn) {
-        case "computer": game.statsComputer+=game.moves.length-1;break;
+      const winScore = (game.moves.length-1)
+      switch (gameMode(game.vs)) {
+        case "zen":
+          game.stats[game.vs].score += winScore
+          game.stats[game.vs].scores.push(winScore)
+          break;
+        case "vs":
+          game.stats[game.vs].otherscore += winScore
+          game.stats[game.vs].scores.push({win:"computer", score:winScore})
+          break;
       }
-      game.stats.push(Math.min(20,game.moves.length-1))
+
       localStorage.setItem("stats", JSON.stringify(game.stats))
-      console.log("Win CPU: " + (game.moves.length-1))
+      console.log("Win CPU: " + winScore)
 
       view.drawGame(game).finished.then(()=>{
         view.mazeDisappear(game.moves).finished.then(()=>{
+          game.turn = "human"
           initMaze()
         })
       })
     } else {
-      switch (game.vs) {
+      switch (gameVSMode(game.vs)) {
         case "computer":
           game.turn = "human"
           break
-        case "self":
-          break
         default:
-          throw ("game.vs invalid: " + game.vs)
+          throw ("gameVSMode invalid: " + gameVSMode(game.vs) + " from "+ game.vs)
       }
       view.drawGame(game)
     }
@@ -476,23 +444,27 @@ const aiClick = (move) => {
 }
 
 
-
-
-const clickRestart = () => {
-  view.scrollToGame()
-
-  game.startPos = game.startPos
-  game.pos = game.startPos
-  game.turn = "human"
-  game.moves = []
-  game.maze = game.startMaze
-  game.startMaze = game.maze
-  view.drawGame(game)
-}
-
 const clickReset = () => {
   view.scrollToGame()
-  localStorage.setItem("stats", JSON.stringify([]))
+
+  switch (gameMode(game.vs)) {
+    case "zen":
+      game.stats[game.vs] = {
+            score: 0,
+            scores: [],
+          }
+      break;
+    case "vs":
+      game.stats[game.vs] = {
+        youscore: 0,
+        otherscore: 0,
+        scores: [],
+      }
+      break;
+  }
+
+  localStorage.setItem("stats", JSON.stringify(game.stats))
+
   initMaze()
 }
 
@@ -551,6 +523,7 @@ const initMazeHTML = () => {
   document.documentElement.style.setProperty("--color-nothing", colors.nothing)
   document.documentElement.style.setProperty("--color-text", colors.startPos)
   document.documentElement.style.setProperty("--color-border", colors.playerPos)
+  game.turn = "human"
 
   initMaze()
 }
