@@ -1,15 +1,6 @@
 // public instance
 function view() {}
 
-// const colors = {
-//   validMove: "#fc9867",
-//   open: "#454046",
-//   playerPos: "#ffd866",
-//   startPos: "#ff6188",
-//   moveDone: "#ff6188",
-//   nothing: "#2c292d",
-//   background: "#2c292d",
-// }
 const colors = {
   // base16 materialtheme
   validMove: "#676E95",
@@ -47,38 +38,7 @@ view.aiThink = (pos,maze) => {
     easing: 'linear',
     delay: 200,
   })
-  // return anime({
-  //   targets: movesValid.map((yx)=>"#box" + yx) ,
-  //   scale: [
-  //     {value:1, duration: 0},
-  //     {value:0.85, duration:0},
-  //     {value:1, duration: 200},
-  //   ],
-  //   backgroundColor: [
-  //       {value:colors.validMove, duration: 0},
-  //       {value:colors.computerPos, duration:100},
-  //       {value:colors.validMove, duration: 100},
-  //   ],
-  //   easing: 'easeOutQuad',
-  //   delay: anime.stagger(180, {start: 200}),
-  // })
 }
-// view.boxMouseDown = (yx) => {
-//   anime({
-//     targets: "#box" + yx ,
-//     scale: [1, 0.85],
-//     duration: 100,
-//     easing: 'easeOutQuad',
-//   })
-// }
-// view.boxMouseUp = (yx) => {
-//   anime({
-//     targets: "#box" + yx ,
-//     scale: [0.85, 1],
-//     duration: 100,
-//     easing: 'easeOutQuad',
-//   })
-// }
 
 view.boxAppear = (yx) => {
   anime({
@@ -177,12 +137,27 @@ view.drawMaze = (maze, startPos, pos, movesDone, turn) => {
 
 
 view.drawGame = (gameState) => {
+  view.drawMenu(gameState.vs, gameState.showHelp)
   view.drawStats(gameState)
   return view.drawMaze(gameState.maze, gameState.startPos, gameState.pos, gameState.moves, gameState.turn)
 }
 
+view.drawMenu = (vs, showHelp) => {
+  document.querySelectorAll(".aiButton").forEach(x=>x.classList.remove("active"))
+  document.getElementById(vs).classList.add("active")
+
+  document.querySelectorAll(".aiCategory").forEach(x=>x.classList.remove("active"))
+  document.getElementById(gameMode(vs)).classList.add("active")
+}
+
+
+
 view.drawStats = (gameState) => {
-  const scoreGameBannerElem = document.getElementById("scoreGameBanner")
+  document.querySelectorAll(".stats").forEach(x=>x.style.display="none")
+  document.getElementById(gameModeStat(gameState.vs)+"stats").style.display=""
+
+
+  const scoreGameBannerElem = document.getElementById(gameModeStat(gameState.vs)+"GameBanner")
   switch (gameState.turn) {
     case "human":
       scoreGameBannerElem.style.color = colors.humanPos; break;
@@ -194,30 +169,76 @@ view.drawStats = (gameState) => {
       scoreGameBannerElem.style.color = "##ff00ff"; break;
   }
 
-
-
-  const scoreGameElem = document.getElementById("scoreGame")
-  const scoreCPUElem = document.getElementById("scoreCPU")
-  const scoreYOUElem = document.getElementById("scoreYOU")
-  scoreCPUElem.textContent = gameState.statsComputer
+  const scoreGameElem = document.getElementById(gameModeStat(gameState.vs)+"ScoreGame")
   scoreGameElem.textContent = Math.max(0,gameState.moves.length-1)
-  scoreYOUElem.textContent = gameState.statsHuman
 
-
-  const maxElem = document.getElementById("max")
-  maxElem.textContent = Math.max(0, ...gameState.stats)
-
-  const gamesElem = document.getElementById("games")
-  gamesElem.textContent = gameState.stats.length
-
-  const rankElem = document.getElementById("rank")
-  // const recentStats = gameState.stats.slice(-5)
-  // rankElem.textContent = "Rank\xa0\xa0\xa0::\xa0\xa0\xa0#" + Math.floor(100 - (100 * ((recentStats.reduce((a, b) => a + b, 0) / (40 * recentStats.length)) || 0)))
-  rankElem.textContent = getRank(game.stats)
+  switch (gameModeStat(gameState.vs)) {
+    case "zen": {
+      const scoreZENElem = document.getElementById("scoreZEN")
+      scoreZENElem.textContent = gameState.stats[gameState.vs].score
+      const gamesZENElem = document.getElementById("gamesZEN")
+      gamesZENElem.textContent = gameState.stats[gameState.vs].scores.length
+      const maxZENElem = document.getElementById("maxZEN")
+      maxZENElem.textContent = Math.max(0, ...gameState.stats[gameState.vs].scores)
+      const gradeZENElem = document.getElementById("gradeZEN")
+      gradeZENElem.textContent = getGradeZEN(gameState.stats[gameState.vs].scores)
+      break;
+    }
+    case "computer": {
+      const scoreYOUElem = document.getElementById("scoreYOUcomputer")
+      scoreYOUElem.textContent = gameState.stats[gameState.vs].youscore
+      const winsYOUElem = document.getElementById("winsYOUcomputer")
+      winsYOUElem.textContent = gameState.stats[gameState.vs].scores.filter(x=>x.win="self").length
+      const maxYOUElem = document.getElementById("maxYOUcomputer")
+      maxYOUElem.textContent = Math.max(0, ...gameState.stats[gameState.vs].scores
+                                                    .filter(x=>x.win="self").map(x=>x.score))
+      const scoreCPUElem = document.getElementById("scoreCPUcomputer")
+      scoreCPUElem.textContent = gameState.stats[gameState.vs].otherscore
+      const winsCPUElem = document.getElementById("winsCPUcomputer")
+      winsCPUElem.textContent = gameState.stats[gameState.vs].scores.filter(x=>x.win="computer").length
+      const maxCPUElem = document.getElementById("maxCPUcomputer")
+      maxCPUElem.textContent = Math.max(0, ...gameState.stats[gameState.vs].scores
+                                                    .filter(x=>x.win="computer").map(x=>x.score))
+      const gradeVSElem = document.getElementById("gradeVS")
+      gradeVSElem.textContent = getGradeVS(gameState.stats[gameState.vs].scores)
+      break;
+    }
+    case "other": {
+      const scoreYOUElem = document.getElementById("scoreYOUother")
+      scoreYOUElem.textContent = gameState.stats[gameState.vs].youscore
+      const winsYOUElem = document.getElementById("winsYOUother")
+      winsYOUElem.textContent = gameState.stats[gameState.vs].scores.filter(x=>x.win="self").length
+      const maxYOUElem = document.getElementById("maxYOUother")
+      maxYOUElem.textContent = Math.max(0, ...gameState.stats[gameState.vs].scores
+                                                    .filter(x=>x.win="self").map(x=>x.score))
+      const scoreOTHERElem = document.getElementById("scoreOTHERother")
+      scoreOTHERElem.textContent = gameState.stats[gameState.vs].otherscore
+      const winsOTHERElem = document.getElementById("winsOTHERother")
+      winsOTHERElem.textContent = gameState.stats[gameState.vs].scores.filter(x=>x.win="other").length
+      const maxOTHERElem = document.getElementById("maxOTHERother")
+      maxOTHERElem.textContent = Math.max(0, ...gameState.stats[gameState.vs].scores
+                                                    .filter(x=>x.win="other").map(x=>x.score))
+      const totalotherElem = document.getElementById("totalother")
+      totalotherElem.textContent = gameState.stats[gameState.vs].scores
+                                                    .reduce((a, b) => a.score + b.score, 0)
+      break;
+    }
+  }
 }
 
-const getRank = (stats) => {
-  const recentStats = [20,20,20,20,20,...stats].slice(-5)
+const getGradeZEN = (scores) => {
+  return getGrade(scores)
+}
+const getGradeVS = (scores) => {
+  return getGrade(scores.slice(-5).map((s=>{
+    s.win === "self"
+      ? Math.max(20,s.score)
+      : Math.min(20,s.score)
+  })))
+}
+
+const getGrade = (scores) => {
+  const recentStats = [20,20,20,20,20,...scores].slice(-5)
 
   const avg = ((recentStats.reduce((a, b) => a + b, 0) / (recentStats.length)) || 0)
 
@@ -268,18 +289,9 @@ const getRank = (stats) => {
   if (avg >= 0){
     return "D-"
   }
-
-
-
 }
 
 view.enterFullscreen = () => {
-  // let elem = document.querySelector(":root")
-  // if (elem.webkitRequestFullScreen) {
-  //   elem.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT)
-  // } else {
-  //   elem.mozRequestFullScreen()
-  // }
   if ((document.fullScreenElement && document.fullScreenElement !== null) ||
    (!document.mozFullScreen && !document.webkitIsFullScreen)) {
     if (document.documentElement.requestFullScreen) {

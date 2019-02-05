@@ -208,11 +208,12 @@ body {
   color: #C3E88D;
   text-shadow: 0 0 2px #C3E88D;
 }
-.aiButton.active {
+.aiButton.active,
+.aiCategory.active,
+#helpButton.active {
   color:  #89DDFF;
   text-shadow: 0 0 2px #89DDFF;
 }
-
 
 
 
@@ -297,7 +298,8 @@ body {
   text-align:center;
   height:40px;
 }
-.CPUstat {
+.CPUstat,
+.OTHERstat {
   color: #C3E88D;
   text-shadow: 0 0 2px #C3E88D;
 }

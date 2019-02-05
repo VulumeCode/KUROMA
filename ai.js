@@ -2,7 +2,7 @@
 function ai() {}
 
 
-ai.drunk = (pos,maze) => {
+ai.zendrunk = (pos,maze) => {
   const movesValid = getMoves(pos,maze)
   movesValid.shuffle()
   for (const move of movesValid) {
@@ -19,7 +19,7 @@ ai.drunk = (pos,maze) => {
 
 
 
-ai.leastmoves = (pos,maze) => {
+ai.vssamurai = (pos,maze) => {
   let bestMove = null // lower is better, 0 is best
   let bestMoveScore = 666
   const movesValid = getMoves(pos,maze)
@@ -39,7 +39,7 @@ ai.leastmoves = (pos,maze) => {
   return bestMove
 }
 
-ai.killormostmoves = (pos,maze) => {
+ai.vsronin = (pos,maze) => {
   let bestMove = null // higher is better, 0 is best
   let bestMoveScore = -666
   const movesValid = getMoves(pos,maze)
@@ -59,7 +59,7 @@ ai.killormostmoves = (pos,maze) => {
   return bestMove
 }
 
-ai.killorsurvive = (pos,maze) => {
+ai.vsninja = (pos,maze) => {
   let bestMove = null // best move is last move where you don't die, or when you can kill
   const mymovesValid = getMoves(pos,maze)
   mymovesValid.shuffle()
@@ -100,7 +100,7 @@ ai.killorsurvive = (pos,maze) => {
 }
 
 
-ai.zen = (pos,maze) => {
+ai.zenmonk = (pos,maze) => {
   const depth = Math.randomIntBetween(8,10)
   let bestMove = null // higher is better, not competetive
   let bestMoveScore = -666
@@ -213,98 +213,4 @@ const maxi = (maze, yx, n) => {
   }
   // console.log(">".repeat(1+n) + (bestMoveScore + 1))
   return bestMoveScore + 1
-}
-
-
-
-
-
-
-
-
-
-const nn = () => {
-  var iteration = 0;
-  const strMove = (a,b) => {
-    if (a<b) {
-      return String(a).padStart(2, "0") + String(b).padStart(2, "0")
-    } else {
-      return String(b).padStart(2, "0") + String(a).padStart(2, "0")
-    }
-  }
-
-  const printMoves = (neurons) => {
-    // console.log(neurons)
-    const valids = []
-    for (const n in neurons) {
-      if (!! neurons[n]) {
-        valids.push(n)
-      }
-    }
-    valids.sort()
-    console.log(valids)
-
-  }
-
-  const maze = [
-    1,1,1,1,1,1,1,1,1,1,
-    1,1,1,1,1,1,1,1,1,1,
-    1,1,1,1,1,1,1,1,1,1,
-    1,1,1,1,1,1,1,1,1,1,
-    1,1,1,1,1,1,1,1,1,1,
-    1,1,1,1,1,1,1,1,1,1,
-    1,1,1,1,1,1,1,1,1,1,
-    1,1,1,1,1,1,1,1,1,1,
-    1,1,1,1,1,1,1,1,1,1,
-    1,1,1,1,1,1,1,1,1,1,
-  ].map(x=>!!x)
-  const G = {}
-  const U0 = {}
-  const V0 = {}
-  for (const yx of _.range(100)) {
-    const moves = getMoves(yx,maze)
-    for (const move of moves) {
-      if (yx < move) {
-        const newMaze = maze.clone()
-        newMaze[yx] = false
-        newMaze[move] = false
-        const movesto = getMoves(yx, newMaze).map(x=>strMove(x,yx))
-        const movesfrom = getMoves(move, newMaze).map(x=>strMove(x,move))
-        G[strMove(yx,move)] = [...movesto,...movesfrom]
-        U0[strMove(yx,move)] = 0
-        V0[strMove(yx,move)] = 0
-      }
-    }
-  }
-
-  let Ut = U0
-  let Vt = V0
-  let Utn = {}
-  let Vtn = {}
-  while (true) {
-    for (const move in G) {
-      Utn[move] = Ut[move] + 4 - G[move].map(x=>Vt[x]).reduce((a,b)=>a+b,0)
-      if (Utn[move] > 3){
-        Vtn[move] = 1
-      } else if (Utn[move] < 0){
-        Vtn[move] = 0
-      } else {
-        Vtn[move] = Vt[move]
-      }
-    }
-
-
-    if (iteration > 100 && _.isEqual(Vt, Vtn)){
-      console.log(iteration,printMoves(Vt))
-      break
-    }
-
-    Ut = Utn
-    Vt = Vtn
-    Utn = {}
-    Vtn = {}
-    iteration += 1
-  }
-  // console.log(iteration,Ut)
-
 }

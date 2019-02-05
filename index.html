@@ -15,8 +15,6 @@
 
 
 <script src="anime.js"></script>
-<script src="lodash.js"></script>
-<script src="jquery-3.3.1.js"></script>
 
 <script src="helpers.js"></script>
 <script src="ai.js"></script>
@@ -25,9 +23,9 @@
 
 </head>
 <body class="unselectable"  onload="initMazeHTML();">
-    <div class="header headerA">&#x9ED2;&#x99AC;</div>
-    <div class="header headerB" id="game">&#x9ED2;&#x99AC;</div>
-    <div class="header headerC">&#x9ED2;&#x99AC;</div>
+    <div class="header headerA">黒馬</div>
+    <div class="header headerB" id="game">黒馬</div>
+    <div class="header headerC">黒馬</div>
     <div class="title titleA">KUROMA</div>
     <div class="title titleB">KUROMA</div>
 
@@ -35,29 +33,29 @@
         <div class="newGame hoverable" onClick="initMaze();">New Game</div>
         <div class="gameModes">
           <div>
-            <span style="float:left" class="aiCategory">ZEN_</span>
-            <span style="float:right" class="aiCategory">_VS</span>
+            <span style="float:left" id="zen" class="aiCategory active">ZEN_</span>
+            <span style="float:right" id="vs" class="aiCategory">_VS</span>
           </div>
           <div>
-            <span style="float:left" id="self" class="aiButton  active" onclick="setVSSelf()">1 Player</span>
-            <span style="float:right" id="other" class="aiButton" onclick="setVSOther()">2 Player</span>
+            <span style="float:left" id="zenself" class="aiButton active" onclick="setVSSelf()">1 Player</span>
+            <span style="float:right" id="vsother" class="aiButton" onclick="setVSOther()">2 Player</span>
           </div>
           <div>
             <span style="float:left" id="zenmaster" class="aiButton" onclick="setVSAI('zenmaster')">AI:Master</span>
-            <span style="float:right" id="killormostmoves" class="aiButton" onclick="setVSAI('killormostmoves')">Ronin:AI</span>
+            <span style="float:right" id="vsronin" class="aiButton" onclick="setVSAI('vsronin')">Ronin:AI</span>
           </div>
           <div>
-            <span style="float:left" id="zen" class="aiButton" onclick="setVSAI('zen')">AI:Monk</span>
-            <span style="float:right" id="leastmoves" class="aiButton" onclick="setVSAI('leastmoves')">Samurai:AI</span>
+            <span style="float:left" id="zenmonk" class="aiButton" onclick="setVSAI('zenmonk')">AI:Monk</span>
+            <span style="float:right" id="vssamurai" class="aiButton" onclick="setVSAI('vssamurai')">Samurai:AI</span>
           </div>
           <div>
-            <span style="float:left" id="drunk" class="aiButton" onclick="setVSAI('drunk')">AI:Drunk</span>
-            <span style="float:right" id="killorsurvive" class="aiButton" onclick="setVSAI('killorsurvive')">Ninja:AI</span>
+            <span style="float:left" id="zendrunk" class="aiButton" onclick="setVSAI('zendrunk')">AI:Drunk</span>
+            <span style="float:right" id="vsninja" class="aiButton" onclick="setVSAI('vsninja')">Ninja:AI</span>
           </div>
         </div>
         <div class="gameOptions">
           <div>
-            <div style="float:left" class="hoverable menuButton material-icons" onClick="clickHelp()">help_outline</div>
+            <div style="float:left" id="helpButton" class="hoverable menuButton material-icons" onClick="clickHelp()">help_outline</div>
             <div class="hoverable menuButton material-icons" onclick="view.enterFullscreen()">fullscreen</div>
             <div style="float:right" class="hoverable warning menuButton material-icons" onClick="clickReset()">settings_backup_restore</div>
           </div>
@@ -77,10 +75,10 @@
       </div>
     </div>
     <div class="panelStats">
-      <div class="stats" id="zenstats" style="display: none">
-        <div  id="scoreGameBanner">
+      <div class="stats" id="zenstats">
+        <div id="zenGameBanner">
           <span style="float:left">>>></span>
-          <span style="float:center" id="scoreGame"></span>
+          <span style="float:center" id="zenScoreGame"></span>
           <span style="float:right"><<<</span>
         </div>
         <div>
@@ -88,42 +86,70 @@
           <span style="float:right" class="YOUstat" id="scoreZEN"></span>
         </div>
         <div>
-          <span style="float:left">Max_</span>
-          <span style="float:right" id="max"></span>
+          <span style="float:left">Games_</span>
+          <span style="float:right" id="gamesZEN"></span>
         </div>
         <div>
-          <span style="float:left">Games_</span>
-          <span style="float:right" id="games"></span>
+          <span style="float:left">Max_</span>
+          <span style="float:right" id="maxZEN"></span>
         </div>
         <div>
           <span style="float:left">Grade_</span>
-          <span style="float:right" id="rank"></span>
+          <span style="float:right" id="gradeZEN"></span>
         </div>
       </div>
-
-      <div class="stats">
-        <div  id="scoreGameBanner">
+      <div class="stats" id="computerstats" style="display: none">
+        <div id="computerGameBanner">
           <span style="float:left">>>></span>
-          <span style="float:center" id="scoreGame"></span>
+          <span style="float:center" id="computerScoreGame"></span>
           <span style="float:right"><<<</span>
         </div>
         <div>
           <span style="float:left" class="YOUstat">YOU_&nbsp;</span>
-          <span style="float:left" class="YOUstat" id="scoreYOU"></span>
+          <span style="float:left" class="YOUstat" id="scoreYOUcomputer"></span>
           <span style="float:right" class="CPUstat">&nbsp;_CPU</span>
-          <span style="float:right" class="CPUstat" id="scoreCPU"></span>
+          <span style="float:right" class="CPUstat" id="scoreCPUcomputer"></span>
         </div>
         <div>
-          <span style="float:left">Max_</span>
-          <span style="float:right" id="max"></span>
+          <span style="float:left" id="winsYOUcomputer"></span>
+          <span style="float:center">_Wins_</span>
+          <span style="float:right" id="winsCPUcomputer"></span>
         </div>
         <div>
-          <span style="float:left">Games_</span>
-          <span style="float:right" id="games"></span>
+          <span style="float:left" id="maxYOUcomputer"></span>
+          <span style="float:center">_Max_</span>
+          <span style="float:right" id="maxCPUcomputer"></span>
         </div>
         <div>
           <span style="float:left">Grade_</span>
-          <span style="float:right" id="rank"></span>
+          <span style="float:right" id="gradeVS"></span>
+        </div>
+      </div>
+      <div class="stats" id="otherstats" style="display: none">
+        <div id="otherGameBanner">
+          <span style="float:left">>>></span>
+          <span style="float:center" id="otherScoreGame"></span>
+          <span style="float:right"><<<</span>
+        </div>
+        <div>
+          <span style="float:left" class="YOUstat">YOU_&nbsp;</span>
+          <span style="float:left" class="YOUstat" id="scoreYOUother"></span>
+          <span style="float:right" class="OTHERstat">&nbsp;_YOU</span>
+          <span style="float:right" class="OTHERstat" id="scoreOTHERother"></span>
+        </div>
+        <div>
+          <span style="float:left" id="winsYOUother"></span>
+          <span style="float:center">_Wins_</span>
+          <span style="float:right" id="winsOTHERother"></span>
+        </div>
+        <div>
+          <span style="float:left" id="maxYOUother"></span>
+          <span style="float:center">_Max_</span>
+          <span style="float:right" id="maxOTHERother"></span>
+        </div>
+        <div>
+          <span style="float:left">Total_</span>
+          <span style="float:right" id="totalother"></span>
         </div>
       </div>
     </div>

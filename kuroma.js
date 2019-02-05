@@ -13,34 +13,6 @@ var startMaze = [
   0,0,0,1,0,1,1,0,0,0,
 ].map(x=>!!x)
 
-// var startPos = 0
-// var startMaze = [
-//   0,0,0,0,1,0,0,0,0,0,
-//   0,0,1,0,0,0,0,0,0,0,
-//   0,1,0,0,0,1,0,0,0,0,
-//   0,0,0,1,0,0,0,0,0,0,
-//   0,0,0,0,0,0,0,0,0,0,
-//   0,0,0,0,0,0,0,0,0,0,
-//   0,0,0,0,0,0,0,0,0,0,
-//   0,0,0,0,0,0,0,0,0,0,
-//   0,0,0,0,0,0,0,0,0,0,
-//   0,0,0,0,0,0,0,0,0,0,
-// ].map(x=>!!x)
-
-var testStartPos = 0
-var testMaze = [
-  0,0,0,0,0,0,0,0,0,0,
-  0,0,1,0,0,0,0,0,0,0,
-  0,1,0,0,0,0,0,0,0,0,
-  0,0,0,1,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,
-].map(x=>!!x)
-
 const dirs = [
   [-2,-1],
   [-2,+1],
@@ -66,14 +38,6 @@ const genMaze = () => {
       mazeCol.push(yx)
     }
   }
-  // TODO compare
-  // // randomly flip 2 cols
-  // [swapColA, swapColB] = [Math.randomInt(10),Math.randomInt(10)]
-  // mazeCols.swap(swapColA, swapColB)
-  // // console.log(swapColA, swapColB)
-  // [swapColA, swapColB] = [Math.randomInt(10),Math.randomInt(10)]
-  // mazeCols.swap(swapColA, swapColB)
-  // // console.log(swapColA, swapColB)
 
   // shuffle cols
   mazeCols.sort((x,y)=>Math.random() < 0.3 ? 0 : Math.random() < 0.5 ? 1 : -1)
@@ -110,7 +74,6 @@ const genMaze = () => {
   } else {
     console.debug("good maze!\ndecMaze(\""+ encMaze(maze)+"\")")
   }
-
 
   return maze
 }
@@ -250,37 +213,6 @@ const mazeToStr = (maze,startPos,pos,moves) => {
 
 
 
-console.log(mazeToStr(startMaze, startPos,startPos,[]))
-
-
-
-var hist = []
-
-// pos is not in mazeSet. the pos will never be reachable (again).
-const explore = (pos, maze, movesDone) => {
-  const moves = getMoves(pos, maze)
-  if (moves.length > 0 && movesDone.length <= 2) {
-    for (let move of moves) {
-      const newMaze = makeMove(move,maze)
-      explore(move, newMaze, [...movesDone,move])
-    }
-  } else {
-    if (true) {
-      hist[movesDone.length] += 1
-      console.log(movesDone.length)
-      console.log(mazeToStr(maze,startPos, pos, movesDone))
-      view.drawMaze(maze,startPos, pos, movesDone)
-      throw "ok"
-    }
-  }
-}
-
-const main = () => {
-  hist = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,]
-  // //[0,0,0,1,1,15,16,125,128,881,1124,5150,7322,26276,40349,114499,177464,413354,614092,1209871,1673876,2812520,3553537,5069489,5711220,6799384,6632516,6474294,5294300,4107834,2690179,1582666,767482,312806,96633,23167,3508,332,0,0,0,0,0,0]
-  explore(startPos, startMaze, [])
-  console.log(hist)
-}
 
 // CONTROLLERS
 
@@ -288,18 +220,80 @@ const main = () => {
 const game = {
   pos : 0,
   turn : "",
-  mode : "",
-  vs : "",
+  vs : "zenself",
   moves : [],
   maze : [],
   startMaze : [],
   startPos : 0,
-  stats : [],
-  statsComputer : 0,
-  statsHuman : 0,
+  stats : {
+    "zenself": {
+      score: 0,
+      scores: [],
+    },
+    "zenmaster": {
+      score: 0,
+      scores: [],
+    },
+    "zenmonk": {
+      score: 0,
+      scores: [],
+    },
+    "zendrunk": {
+      score: 0,
+      scores: [],
+    },
+    "vsother": {
+      youscore: 0,
+      otherscore: 0,
+      scores: [],
+    },
+    "vsronin": {
+      youscore: 0,
+      otherscore: 0,
+      scores: [],
+    },
+    "vssamurai": {
+      youscore: 0,
+      otherscore: 0,
+      scores: [],
+    },
+    "vsninja": {
+      youscore: 0,
+      otherscore: 0,
+      scores: [],
+    },
+  },
   ai : null,
   showHelp: false,
 }
+
+
+const gameMode = (vs) => {
+  if (vs.startsWith("vs")){
+    return "vs"
+  } else {
+    return "zen"
+  }
+}
+const gameVSMode = (vs) => {
+  switch (vs) {
+    case "zenself": return "self"
+    case "vsother": return "other"
+    default: return "computer"
+  }
+}
+const gameModeStat = (vs) => {
+  if (vs === "vsother") {
+    return "other"
+  } else if (vs.startsWith("zen")) {
+    return "zen"
+  } else {
+    return "computer"
+  }
+}
+
+
+
 
 const initMazeStatic = () => {
   game.startPos = startPos
@@ -346,12 +340,11 @@ const initMazeRandom = () => {
 const initMaze = () => {
   view.scrollToGame()
 
-  const loadStats = localStorage.getItem('stats')
-  if (loadStats){
-    game.stats = JSON.parse(loadStats)
-  } else {
-    game.stats = []
-  }
+  // TODO
+  // const loadStats = localStorage.getItem('stats')
+  // if (loadStats){
+  //   game.stats = JSON.parse(loadStats)
+  // }
 
   view.mazeBlank().finished.then(()=>{
     initMazeRandom()
@@ -367,7 +360,6 @@ const playerClick = (move) => {
   view.boxClick(move)
 
   const movesValid = getMoves(game.pos,game.maze)
-  // TODO tap movesValid
 
   if ( ! ["human","other"].includes(game.turn) ) {
     console.warn("Not your turn")
@@ -391,7 +383,7 @@ const playerClick = (move) => {
       }
 
       if (game.vs === "computer"){
-        game.stats.push(Math.max(20,game.moves.length-1))
+        game.stats.push()
       } else {
         game.stats.push((game.moves.length-1))
       }
@@ -404,7 +396,7 @@ const playerClick = (move) => {
         })
       })
     } else {
-      switch (game.vs) {
+      switch (gameVSMode(game.vs)) {
         case "computer":
           game.turn = "computer"
           view.aiThink(game.pos,game.maze).finished.then(function(){
@@ -426,9 +418,7 @@ const playerClick = (move) => {
 
 const playerClickCheck = (move) => {
   view.boxClick(move)
-
   const movesValid = getMoves(game.pos,game.maze)
-
       const movesValidNext = getMoves(move,game.maze)
       for (let moveValidNext of movesValidNext) {
         view.boxClick(moveValidNext)
@@ -441,7 +431,6 @@ const aiClick = (move) => {
   if (game.turn != "computer") {
     throw ("Not AI's turn")
   }
-
 
   console.debug("click computer", move)
   view.boxClick(move)
@@ -503,8 +492,6 @@ const clickRestart = () => {
 
 const clickReset = () => {
   view.scrollToGame()
-  game.statsComputer = 0
-  game.statsHuman = 0
   localStorage.setItem("stats", JSON.stringify([]))
   initMaze()
 }
@@ -514,11 +501,13 @@ const clickHelp = () => {
     game.showHelp = false;
     document.getElementById("help").style.display = "none"
     document.getElementById("maze").style.display = ""
+    document.getElementById('helpButton').classList.remove("active")
   } else {
     view.scrollToGame()
     game.showHelp = true;
     document.getElementById("help").style.display = ""
     document.getElementById("maze").style.display = "none"
+    document.getElementById('helpButton').classList.add("active")
   }
 }
 
@@ -527,37 +516,22 @@ const clickHelp = () => {
 
 
 const setVSAI = (ai_name) => {
-  document.querySelector(".active").classList.remove("active")
   game.ai = ai[ai_name]
-  game.vs = "computer"
-  document.getElementById(ai_name).classList.add("active")
+  game.vs = ai_name
   view.scrollToGame()
-  game.statsComputer = 0
-  game.statsHuman = 0
-  // localStorage.setItem("stats", JSON.stringify([20,20,20,20,20]))
   initMaze()
 }
 
 const setVSSelf = () => {
-  document.querySelector(".active").classList.remove("active")
   game.ai = null
-  game.vs = "self"
-  document.getElementById("self").classList.add("active")
+  game.vs = "zenself"
   view.scrollToGame()
-  game.statsComputer = 0
-  game.statsHuman = 0
-  // localStorage.setItem("stats", JSON.stringify([20,20,20,20,20]))
   initMaze()
 }
 const setVSOther = () => {
-  document.querySelector(".active").classList.remove("active")
   game.ai = null
-  game.vs = "other"
-  document.getElementById("other").classList.add("active")
+  game.vs = "vsother"
   view.scrollToGame()
-  game.statsComputer = 0
-  game.statsHuman = 0
-  // localStorage.setItem("stats", JSON.stringify([20,20,20,20,20]))
   initMaze()
 }
 
@@ -574,11 +548,12 @@ const initMazeHTML = () => {
     boxDiv.onmousedown = (()=>playerClickCheck(yx))
   }
 
-  game.ai = null
-  game.vs = "self"
   document.documentElement.style.setProperty("--color-nothing", colors.nothing)
   document.documentElement.style.setProperty("--color-text", colors.startPos)
   document.documentElement.style.setProperty("--color-border", colors.playerPos)
 
   initMaze()
 }
+
+
+console.log("🐴")
