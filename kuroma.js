@@ -531,6 +531,7 @@ const initMazeHTML = () => {
   const loadVS = localStorage.getItem('vs')
   if (loadVS){
     game.vs = JSON.parse(loadVS)
+    game.ai = ai[JSON.parse(loadVS)]
   }
 
   initMaze()
