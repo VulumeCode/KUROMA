@@ -1,5 +1,0 @@
-KUROMA
-黒馬
-fonts:
-04b_09
-Microsoft YaHei
