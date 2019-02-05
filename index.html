@@ -59,7 +59,7 @@
           <div>
             <div style="float:left" class="hoverable menuButton material-icons" onClick="clickHelp()">help_outline</div>
             <div class="hoverable menuButton material-icons" onclick="view.enterFullscreen()">fullscreen</div>
-            <div style="float:right" class="hoverable menuButton material-icons" onClick="clickReset()">settings_backup_restore</div>
+            <div style="float:right" class="hoverable warning menuButton material-icons" onClick="clickReset()">settings_backup_restore</div>
           </div>
         </div>
       </div>
@@ -68,16 +68,16 @@
         <!-- <div class="box" id="xx" onClick="playerClick(xx)"></div> -->
       </div>
       <div class="help" id="help"   style="display: none" onClick="clickHelp()">
-        <p>KUROMA_ Jump across the board like a horse in chess. Don't jump on the same square twice.</p>
-        <p>ZEN_ Try to make as many jumps as possible. Play along with an AI to guide or challenge you.</p>
-        <p>VS_ Force your opponent in a position they can't jump away from.
-          Play against another human or an AI. Each AI has their own strategy, not ranked by difficulty.</p>
-        <p>Click <span class="material-icons">settings_backup_restore</span> to reset all scores.</p>
-        <p>Click <span class="material-icons">fullscreen</span> to go fullscreen.</p>
+        <p>KUROMA_ Jump over the board like a chess horse. Do not jump twice to the same square.</p>
+        <p>ZEN_ Try to jump as much as possible. Please play with AI to guide you and challenge you. </p>
+        <p>VS_ Force a position where the opponent can not jump.
+        Play against other people and AI. Each AI has its own strategy that is not ranked by difficulty level.</p>
+        <p>To reset all the scores, click <span class="material-icons">settings_backup_restore</span></p>
+        <p>To display full screen, click <span class="material-icons">fullscreen</span></p>
       </div>
     </div>
     <div class="panelStats">
-      <!-- <div class="stats" style="display: none">
+      <div class="stats" id="zenstats" style="display: none">
         <div  id="scoreGameBanner">
           <span style="float:left">>>></span>
           <span style="float:center" id="scoreGame"></span>
@@ -99,7 +99,7 @@
           <span style="float:left">Grade_</span>
           <span style="float:right" id="rank"></span>
         </div>
-      </div> -->
+      </div>
 
       <div class="stats">
         <div  id="scoreGameBanner">
