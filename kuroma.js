@@ -490,6 +490,7 @@ const clickHelp = () => {
 const setVSAI = (ai_name) => {
   game.ai = ai[ai_name]
   game.vs = ai_name
+  localStorage.setItem("vs", JSON.stringify(game.vs))
   view.scrollToGame()
   initMaze()
 }
@@ -497,12 +498,14 @@ const setVSAI = (ai_name) => {
 const setVSSelf = () => {
   game.ai = null
   game.vs = "zenself"
+  localStorage.setItem("vs", JSON.stringify(game.vs))
   view.scrollToGame()
   initMaze()
 }
 const setVSOther = () => {
   game.ai = null
   game.vs = "vsother"
+  localStorage.setItem("vs", JSON.stringify(game.vs))
   view.scrollToGame()
   initMaze()
 }
@@ -524,6 +527,11 @@ const initMazeHTML = () => {
   document.documentElement.style.setProperty("--color-text", colors.startPos)
   document.documentElement.style.setProperty("--color-border", colors.playerPos)
   game.turn = "human"
+
+  const loadVS = localStorage.getItem('vs')
+  if (loadVS){
+    game.vs = JSON.parse(loadVS)
+  }
 
   initMaze()
 }
