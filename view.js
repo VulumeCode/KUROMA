@@ -230,11 +230,11 @@ const getGradeZEN = (scores) => {
   return getGrade(scores)
 }
 const getGradeVS = (scores) => {
-  return getGrade(scores.slice(-5).map((s=>{
+  return getGrade(scores.slice(-5).map((s=>
     s.win === "self"
       ? Math.max(20,s.score)
       : Math.min(20,s.score)
-  })))
+  )))
 }
 
 const getGrade = (scores) => {
